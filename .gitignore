@@ -12,7 +12,7 @@
 .idea/*
 
 # .tfvars files
-**/sensitive.tfvars
+# **/sensitive.tfvars
 
 # Crash log files
 **/crash.log

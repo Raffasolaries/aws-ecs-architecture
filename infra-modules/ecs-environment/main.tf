@@ -11,6 +11,7 @@ module ecs_task_definition_and_service {
   fargate_memory              = 2048
   app_port = var.app_port
   vpc_id = var.vpc_id
+
   # Service
   cluster_id = var.cluster_id
   app_count = var.app_count
@@ -21,4 +22,8 @@ module ecs_task_definition_and_service {
   host_header_production = var.host_header_production
   listener_arn = var.listener_arn
   task_definition_role_arn = var.task_definition_role_arn
+
+  # Load Balancer
+  load_balancer_name = var.load_balancer_name
+  load_balancer_id = var.load_balancer_id
 }

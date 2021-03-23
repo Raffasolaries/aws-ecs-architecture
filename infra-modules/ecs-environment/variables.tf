@@ -98,6 +98,16 @@ variable "task_definition_role_arn" {
  description = "Task definition role ARN"
 }
 
+variable "load_balancer_name" {
+ type = string
+ description = "Load Balancer Name"
+}
+
+variable "load_balancer_id" {
+ type = string
+ description = "Load Balancer ARN"
+}
+
 # variable "main_pvt_route_table_id" {
 #   type        = string
 #   description = "Main route table id"
