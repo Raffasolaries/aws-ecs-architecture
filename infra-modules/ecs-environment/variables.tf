@@ -18,13 +18,18 @@ variable "platform_name" {
   type = string
 }
 
-variable "platform_name_env" {
-  type        = string
-  description = "The name of the application plus - the Environment"
+variable "platform_name_develop" {
+  description = "The name of the platform + env"
+  type = string
 }
 
-variable "environment" {
-  description = "Applicaiton environment"
+variable "platform_name_latest" {
+  description = "The name of the platform + env"
+  type = string
+}
+
+variable "platform_name_production" {
+  description = "The name of the platform + env"
   type = string
 }
 
@@ -68,7 +73,17 @@ variable "private_subnet_ids" {
   description = "IDs for private subnets"
 }
 
-variable "host_header" {
+variable "host_header_develop" {
+  type = string 
+  description = "The host which request the application target"
+}
+
+variable "host_header_latest" {
+  type = string 
+  description = "The host which request the application target"
+}
+
+variable "host_header_production" {
   type = string 
   description = "The host which request the application target"
 }

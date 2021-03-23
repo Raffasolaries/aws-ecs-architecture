@@ -1,13 +1,17 @@
 resource "aws_appautoscaling_target" "ecs_target" {
   max_capacity       = 20
   min_capacity       = 1
-  resource_id        = "service/clusterName/serviceName"
+  resource_id        = "service/${aws_ecs_service.production.name}/${aws_ecs_service.production.name}"
   scalable_dimension = "ecs:service:DesiredCount"
-  service_namespace  = "${var.name_production}-service"
+  service_namespace  = "ecs"
+
+  depends_on  = [
+   aws_ecs_service.production
+ ]
 }
 
 resource "aws_appautoscaling_policy" "ecs_policy" {
-  name               = ""
+  name               = "RequestCountPerTarget"
   policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.ecs_target.resource_id
   scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
@@ -15,11 +19,11 @@ resource "aws_appautoscaling_policy" "ecs_policy" {
 
   target_tracking_scaling_policy_configuration {
    predefined_metric_specification {
-     predefined_metric_type = "RDSReaderAverageCPUUtilization"
+     predefined_metric_type = "ALBRequestCountPerTarget"
    }
 
-   target_value       = 75
+   target_value       = 200
    scale_in_cooldown  = 300
-   scale_out_cooldown = 300
+   scale_out_cooldown = 2
  }
 }

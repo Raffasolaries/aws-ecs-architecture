@@ -11,18 +11,18 @@ resource "aws_ecs_service" "develop" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.alb_tg.arn
+    target_group_arn = aws_lb_target_group.develop.arn
     container_name   = "${var.name_develop}-container"
     container_port   = var.app_port
   }
 
+  depends_on = [
+    aws_ecs_task_definition.develop
+  ]
+
   tags = {
     Name = "${var.name_develop}-service"
   }
-
-  depends_on = [
-    aws_ecs_task_definition.develop,
-  ]
 }
 
 resource "aws_ecs_service" "latest" {
@@ -38,7 +38,7 @@ resource "aws_ecs_service" "latest" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.alb_tg.arn
+    target_group_arn = aws_lb_target_group.latest.arn
     container_name   = "${var.name_latest}-container"
     container_port   = var.app_port
   }
@@ -48,7 +48,7 @@ resource "aws_ecs_service" "latest" {
   }
 
   depends_on = [
-    aws_ecs_task_definition.latest,
+    aws_ecs_task_definition.latest
   ]
 }
 
@@ -65,7 +65,7 @@ resource "aws_ecs_service" "production" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.alb_tg.arn
+    target_group_arn = aws_lb_target_group.production.arn
     container_name   = "${var.name_production}-container"
     container_port   = var.app_port
   }
