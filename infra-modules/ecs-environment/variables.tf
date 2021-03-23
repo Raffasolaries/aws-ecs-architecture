@@ -18,6 +18,11 @@ variable "platform_name" {
   type = string
 }
 
+variable "platform_name_env" {
+  type        = string
+  description = "The name of the application plus - the Environment"
+}
+
 variable "environment" {
   description = "Applicaiton environment"
   type = string
@@ -43,7 +48,42 @@ variable "app_count" {
   description = "The number of instances of the task definition to place and keep running."
 }
 
-variable "main_pvt_route_table_id" {
-  type        = string
-  description = "Main route table id"
+variable "vpc_id" {
+  type = string 
+  description = "The id for the VPC where the ECS container instance should be deployed"
 }
+
+variable "cluster_id" {
+  type = string 
+  description = "Cluster ID"
+}
+
+variable "ecs_service_security_group_id" {
+  type = string 
+  description = "The ID of the security group for the ECS tasks"
+}
+
+variable "private_subnet_ids" {
+  type = list(string)
+  description = "IDs for private subnets"
+}
+
+variable "host_header" {
+  type = string 
+  description = "The host which request the application target"
+}
+
+variable "listener_arn" {
+ type = string
+ description = "Corporate Load Balancer ARN"
+}
+
+variable "task_definition_role_arn" {
+ type = string
+ description = "Task definition role ARN"
+}
+
+# variable "main_pvt_route_table_id" {
+#   type        = string
+#   description = "Main route table id"
+# }

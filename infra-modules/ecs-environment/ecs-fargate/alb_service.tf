@@ -15,7 +15,7 @@ resource "aws_lb_target_group" "alb_tg" {
   # depends_on  = [
   #   aws_lb.alb
   # ]
-  name        = "${var.name}-${var.environment}-tg"
+  name        = "${var.name_env}-tg"
   port        = var.app_port
   protocol    = "TCP"
   vpc_id      = var.vpc_id

@@ -3,6 +3,11 @@ variable "name" {
   description = "The name of the application and the family"
 }
 
+variable "name_env" {
+  type        = string
+  description = "The name of the application plus - the Environment"
+}
+
 variable "app_image" {
   type = string 
   description = "Container image to be used for application in task definition file"
