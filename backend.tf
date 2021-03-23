@@ -2,7 +2,7 @@
 terraform {
   backend "s3" {
     bucket         = "tantosvago-terraform-ecs-state"
-    dynamodb_table = "terraform-lock-table"
+    dynamodb_table = "terraform-ecs-lock-table"
     encrypt        = true
     key            = "./terraform.tfstate"
     region         = "eu-west-3"
