@@ -9,6 +9,6 @@ ecs_service_security_group_id = "sg-00e0ad0119d3f225b"
 private_subnet_ids = ["subnet-0f0513501f1bba18e", "subnet-07dd7e99f19e11e1e", "subnet-071d01698a3caa1a0"]
 availability_zones = ["eu-west-3a","eu-west-3c", "eu-west-3b"]
 app_count = "1"
-host_header = "sva.go"
+host_header = "dev-sva-go.tantosvago.it"
 listener_arn = "arn:aws:elasticloadbalancing:eu-west-3:255994201635:listener/app/corporate-lb/34fd2807f2fab7d6/515a6e311a2ed528"
 task_definition_role_arn = "arn:aws:iam::255994201635:role/ecsTaskExecutionRole"

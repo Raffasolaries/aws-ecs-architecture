@@ -1,4 +1,4 @@
-output nlb_arn {
+output alb_arn {
   value       = aws_lb.alb.arn
   description = "ARN for the internal ALB"
 }
