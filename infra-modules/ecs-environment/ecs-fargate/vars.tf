@@ -3,7 +3,17 @@ variable "name" {
   description = "The name of the application and the family"
 }
 
-variable "name_env" {
+variable "name_develop" {
+  type        = string
+  description = "The name of the application plus - the Environment"
+}
+
+variable "name_latest" {
+  type        = string
+  description = "The name of the application plus - the Environment"
+}
+
+variable "name_production" {
   type        = string
   description = "The name of the application plus - the Environment"
 }
@@ -11,11 +21,6 @@ variable "name_env" {
 variable "app_image" {
   type = string 
   description = "Container image to be used for application in task definition file"
-}
-
-variable "environment" {
-  type = string
-  description = "The application environment"
 }
 
 variable "fargate_cpu" {
@@ -58,7 +63,18 @@ variable "aws_security_group_ecs_tasks_id" {
   description = "The ID of the security group for the ECS tasks"
 }
 
-variable "host_header" {
+variable "host_header_develop" {
+  type = string 
+  description = "The host which request the application target"
+}
+
+variable "host_header_latest" {
+  type = string 
+  description = "The host which request the application target"
+}
+
+
+variable "host_header_production" {
   type = string 
   description = "The host which request the application target"
 }

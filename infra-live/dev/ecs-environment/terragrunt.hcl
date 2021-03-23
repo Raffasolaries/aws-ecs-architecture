@@ -1,8 +1,3 @@
-inputs = {
-  environment    = "develop"
-  app_count = 1
-}
-
 include {
   # The find_in_parent_folders() helper will 
   # automatically search up the directory tree to find the root terragrunt.hcl and inherit 
