@@ -52,3 +52,18 @@ variable "aws_security_group_ecs_tasks_id" {
   type = string 
   description = "The ID of the security group for the ECS tasks"
 }
+
+variable "host_header" {
+  type = string 
+  description = "The host which request the application target"
+}
+
+variable "listener_arn" {
+ type = string
+ description = "Corporate Load Balancer ARN"
+}
+
+variable "task_definition_role_arn" {
+ type = string
+ description = "Task definition role ARN"
+}

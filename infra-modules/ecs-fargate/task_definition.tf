@@ -1,14 +1,14 @@
 resource "aws_ecs_task_definition" "main" {
-  family             = var.name
-  task_role_arn = aws_iam_role.task_role.arn
-  execution_role_arn = aws_iam_role.main_ecs_tasks.arn
+  family             = "${var.name}-${var.environment}-task"
+  task_role_arn = var.task_definition_role_arn
+  execution_role_arn = var.task_definition_role_arn
   network_mode       = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu    = var.fargate_cpu
   memory = var.fargate_memory
   container_definitions = jsonencode([
     {
-      name : var.name,
+      name : "${var.name}-${var.environment}-container",
       image : var.app_image,
       cpu : var.fargate_cpu,
       memory : var.fargate_memory,
@@ -16,8 +16,7 @@ resource "aws_ecs_task_definition" "main" {
       portMappings : [
         {
           containerPort : var.app_port
-          protocol : "tcp",
-          hostPort : var.app_port
+          protocol : "tcp"
         }
       ]
     }

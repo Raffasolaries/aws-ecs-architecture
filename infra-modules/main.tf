@@ -1,15 +1,8 @@
-# ECS cluster
-module ecs_cluster {
-  source = "./ecs-cluster"
-  name = "${var.platform_name}-${var.environment}-cluster"
-  cluster_tag_name = "${var.platform_name}-${var.environment}-cluster"
-}
-
 # ECS task definition and service
 module ecs_task_definition_and_service {
   # Task definition and NLB
   source = "./ecs-fargate"
-  name = "${var.platform_name}-${var.environment}"
+  name = var.platform_name
   app_image = var.app_image
   fargate_cpu                 = 1024
   fargate_memory              = 2048
@@ -19,6 +12,9 @@ module ecs_task_definition_and_service {
   # Service
   cluster_id = module.ecs_cluster.id 
   app_count = var.app_count
-  aws_security_group_ecs_tasks_id = module.vpc_for_ecs_fargate.ecs_tasks_security_group_id
-  private_subnet_ids = module.vpc_for_ecs_fargate.private_subnet_ids
+  aws_security_group_ecs_tasks_id = var.ecs_service_security_group_id
+  private_subnet_ids = var.private_subnet_ids
+  host_header = var.host_header
+  listener_arn = var.listener_arn
+  task_definition_role_arn = var.task_definition_role_arn
 }

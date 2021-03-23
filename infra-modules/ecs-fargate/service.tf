@@ -1,5 +1,5 @@
 resource "aws_ecs_service" "main" {
-  name            = "${var.name}-service"
+  name            = "${var.name}-${var.environment}-service"
   cluster         = var.cluster_id
   task_definition = aws_ecs_task_definition.main.family
   desired_count   = var.app_count
@@ -7,13 +7,17 @@ resource "aws_ecs_service" "main" {
 
   network_configuration {
     security_groups = ["${var.aws_security_group_ecs_tasks_id}"]
-    subnets         = var.private_subnet_ids
+    subnets = var.private_subnet_ids
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.nlb_tg.arn
-    container_name   = var.name
+    target_group_arn = aws_lb_target_group.alb_tg.arn
+    container_name   = "${var.name}-${var.environment}-container"
     container_port   = var.app_port
+  }
+
+  tags = {
+    Name = "${var.name}-${var.environment}-service"
   }
 
   depends_on = [

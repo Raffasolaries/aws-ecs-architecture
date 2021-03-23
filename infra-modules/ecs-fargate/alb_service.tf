@@ -27,21 +27,11 @@ resource "aws_lb_listener_rule" "host_based_routing" {
  depends_on  = [
    aws_lb_target_group.alb_tg
  ]
- load_balancer_arn = var.alb_arn
- port = 443
- protocol = "HTTPS"
+ listener_arn = var.listener_arn
 
  action {
-   type = "forward"
-   forward {
-    target_group {
-      arn = aws_lb_target_group.alb_tg.arn
-    }
-    stickiness {
-      enabled  = true
-      duration = 600
-    }
-   }
+  type = "forward"
+  target_group_arn = aws_lb_target_group.alb_tg.arn
  }
 
  condition {
