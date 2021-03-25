@@ -21,7 +21,8 @@ module ecs_task_definition_and_service {
  host_header_latest = var.host_header_latest
  host_header_production = var.host_header_production
  listener_arn = var.listener_arn
- task_definition_role_arn = var.task_definition_role_arn
+ task_definition_role_arn = module.alb_target_groups_rules.develop_arn
+ // task_definition_role_arn = var.task_definition_role_arn
 
  # Load Balancer
  load_balancer_name = var.load_balancer_name
