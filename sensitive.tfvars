@@ -1,9 +1,9 @@
 region = "eu-west-3"
 profile = "default"
-platform_name = "sva-go"
-platform_name_develop = "sva-go-develop"
-platform_name_latest = "sva-go-latest"
-platform_name_production = "sva-go-production"
+platform_name = "svago"
+platform_name_develop = "svago-develop"
+platform_name_latest = "svago-latest"
+platform_name_production = "svago-production"
 cluster_id = "corporate-cluster"
 vpc_id = "vpc-04406ff0eb044cd27"
 app_port = 8080

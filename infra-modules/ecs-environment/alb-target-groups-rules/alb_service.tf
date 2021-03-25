@@ -21,8 +21,12 @@ resource "aws_lb_target_group" "develop" {
   vpc_id      = var.vpc_id
   target_type = "ip"
 
+  stickiness {
+   type = "lb_cookie"
+  }
+
   tags = {
-    "Name" = "${var.name_develop}-tg"
+    Name = "${var.name_develop}-tg"
   }
 }
 
@@ -56,7 +60,7 @@ resource "aws_lb_target_group" "latest" {
   target_type = "ip"
 
   tags = {
-    "Name" = "${var.name_latest}-tg"
+    Name = "${var.name_latest}-tg"
   }
 }
 

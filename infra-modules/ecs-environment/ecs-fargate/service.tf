@@ -47,6 +47,10 @@ resource "aws_ecs_service" "latest" {
     Name = "${var.name_latest}-service"
   }
 
+  deployment_controller {
+   type = "EXTERNAL"
+  }
+
   depends_on = [
     aws_ecs_task_definition.latest
   ]
