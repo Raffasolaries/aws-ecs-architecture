@@ -1,9 +1,9 @@
 module "develop" {
  source = "./modules/develop"
+ region = var.region
  environment = var.environment
  platform_name = var.platform_name
  app_name = var.app_name
  vpc_cidr = var.vpc_cidr
- public_subnets_cidr = var.public_subnets_cidr
- private_subnets_cidr = var.private_subnets_cidr
+ subnets_newbits = var.subnets_newbits
 }

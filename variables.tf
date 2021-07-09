@@ -29,12 +29,7 @@ variable "vpc_cidr" {
  description = "CIDR VPC block"
 }
 
-variable "public_subnets_cidr" {
- type = list
- description = "cidr blocks for public subnets"
-}
-
-variable "private_subnets_cidr" {
- type = list
- description = "cidr blocks for private subnets"
+variable "subnets_newbits" {
+ type = number
+ description = "the difference between subnet mask and network mask"
 }
