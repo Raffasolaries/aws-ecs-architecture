@@ -1,102 +1,115 @@
+data "aws_availability_zones" "available" {
+ state = "available"
+}
 /*==== The VPC ======*/
 resource "aws_vpc" "vpc" {
+ count = var.environment == "develop" ? 1 : 0
  cidr_block           = var.vpc_cidr
  enable_dns_hostnames = true
  enable_dns_support   = true
  tags = {
-  Name        = join("-", [var.app_name, var.environment, "vpc"])
+  Name        = join("-", [var.environment, var.platform_name, "vpc"])
   Environment = var.environment
  }
 }
 /*==== Subnets ======*/
 /* Internet gateway for the public subnet */
-// resource "aws_internet_gateway" "ig" {
-//   vpc_id = aws_vpc.vpc.id
-//   tags = {
-//     Name        = "${var.environment}-igw"
-//     Environment = var.environment
-//   }
-// }
-// /* Elastic IP for NAT */
-// resource "aws_eip" "nat_eip" {
-//  vpc        = true
-//  depends_on = [aws_internet_gateway.ig]
-//  tags = {
-//   Name = "${var.environment}-${var.app_name}-eip"
-//   Environment = var.environment
-//  }
-// }
+resource "aws_internet_gateway" "ig" {
+ count = var.environment == "develop" ? 1 : 0
+ depends_on = [aws_vpc.vpc]
+ vpc_id = aws_vpc.vpc[0].id
+ tags = {
+   Name        = join("-", [var.environment, var.platform_name, "igw"])
+   Environment = var.environment
+ }
+}
+/* Elastic IP for NAT */
+resource "aws_eip" "nat_eip" {
+ count = var.environment == "develop" ? 1 : 0
+ vpc        = true
+ depends_on = [aws_internet_gateway.ig]
+ tags = {
+  Name = join("-", [var.environment, var.platform_name, "eip"])
+  Environment = var.environment
+ }
+}
 // /* NAT */
-// resource "aws_nat_gateway" "nat" {
-//   allocation_id = aws_eip.nat_eip.id
-//   subnet_id     = element(aws_subnet.public_subnet.*.id, 0)
-//   depends_on    = [aws_internet_gateway.ig]
-//   tags = {
-//     Name        = "${var.environment}-${var.app_name}-nat"
-//     Environment = var.environment
-//   }
-// }
+resource "aws_nat_gateway" "nat" {
+ count = var.environment == "develop" ? 1 : 0
+ allocation_id = aws_eip.nat_eip[0].id
+ subnet_id     = element(aws_subnet.public_subnet.*.id, 0)
+ depends_on    = [aws_internet_gateway.ig]
+ tags = {
+  Name        = join("-", [var.environment, var.platform_name, "nat"])
+  Environment = var.environment
+ }
+}
 // /* Public subnet */
-// resource "aws_subnet" "public_subnet" {
-//   vpc_id                  = aws_vpc.vpc.id
-//   count                   = length(var.public_subnets_cidr)
-//   cidr_block              = element(var.public_subnets_cidr,   count.index)
-//   availability_zone       = element(var.availability_zones,   count.index)
-//   map_public_ip_on_launch = true
-//   tags = {
-//     Name        = "${var.environment}-${element(var.availability_zones, count.index)}-public-subnet"
-//     Environment = var.environment
-//   }
-// }
+resource "aws_subnet" "public_subnet" {
+ count = var.environment == "develop" ? length(data.aws_availability_zones.available.names) : 0
+ vpc_id                  = aws_vpc.vpc[0].id
+ cidr_block              = element(var.public_subnets_cidr, count.index)
+ availability_zone       = element(data.aws_availability_zones.available.names, count.index)
+ map_public_ip_on_launch = true
+ tags = {
+  Name        = join("-", [var.environment, element(data.aws_availability_zones.available.names, count.index), "public-subnet"])
+  Environment = var.environment
+ }
+}
 // /* Private subnet */
-// resource "aws_subnet" "private_subnet" {
-//   vpc_id                  = aws_vpc.vpc.id
-//   count                   = length(var.private_subnets_cidr)
-//   cidr_block              = element(var.private_subnets_cidr, count.index)
-//   availability_zone       = element(var.availability_zones,   count.index)
-//   map_public_ip_on_launch = false
-//   tags = {
-//     Name        = "${var.environment}-${element(var.availability_zones, count.index)}-private-subnet"
-//     Environment = var.environment
-//   }
-// }
-// /* Routing table for private subnet */
-// resource "aws_route_table" "private" {
-//  vpc_id = aws_vpc.vpc.id
-//  tags = {
-//   Name        = "${var.environment}-${var.app_name}-private-route-table"
-//   Environment = var.environment
-//  }
-// }
-// /* Routing table for public subnet */
-// resource "aws_route_table" "public" {
-//  vpc_id = aws_vpc.vpc.id
-//  tags = {
-//   Name        = "${var.environment}-${var.app_name}-public-route-table"
-//   Environment = var.environment
-//  }
-// }
-// resource "aws_route" "public_internet_gateway" {
-//  route_table_id         = aws_route_table.public.id
-//  destination_cidr_block = "0.0.0.0/0"
-//  gateway_id             = aws_internet_gateway.ig.id
-// }
-// resource "aws_route" "private_nat_gateway" {
-//  route_table_id         = aws_route_table.private.id
-//  destination_cidr_block = "0.0.0.0/0"
-//  nat_gateway_id         = aws_nat_gateway.nat.id
-// }
-// /* Route table associations */
-// resource "aws_route_table_association" "public" {
-//  count          = length(var.public_subnets_cidr)
-//  subnet_id      = element(aws_subnet.public_subnet.*.id, count.index)
-//  route_table_id = aws_route_table.public.id
-// }
-// resource "aws_route_table_association" "private" {
-//  count          = length(var.private_subnets_cidr)
-//  subnet_id      = element(aws_subnet.private_subnet.*.id, count.index)
-//  route_table_id = aws_route_table.private.id
-// }
+resource "aws_subnet" "private_subnet" {
+ count = var.environment == "develop" ? length(data.aws_availability_zones.available.names) : 0
+ vpc_id = aws_vpc.vpc[0].id
+ cidr_block              = element(var.private_subnets_cidr, count.index)
+ availability_zone       = element(data.aws_availability_zones.available.names, count.index)
+ map_public_ip_on_launch = false
+ tags = {
+  Name        = join("-", [var.environment, element(data.aws_availability_zones.available.names, count.index), "private-subnet"])
+  Environment = var.environment
+ }
+}
+/* Routing table for private subnet */
+resource "aws_route_table" "private" {
+ count = var.environment == "develop" ? 1 : 0
+ vpc_id = aws_vpc.vpc[0].id
+ tags = {
+  Name        = join("-", [var.environment, var.platform_name, "private-rt"])
+  Environment = var.environment
+ }
+}
+/* Routing table for public subnet */
+resource "aws_route_table" "public" {
+ count = var.environment == "develop" ? 1 : 0
+ vpc_id = aws_vpc.vpc[0].id
+ tags = {
+  Name        = join("-", [var.environment, var.platform_name, "public-rt"])
+  Environment = var.environment
+ }
+}
+/* Routes */
+resource "aws_route" "public_internet_gateway" {
+ count = var.environment == "develop" ? 1 : 0
+ route_table_id         = aws_route_table.public[0].id
+ destination_cidr_block = "0.0.0.0/0"
+ gateway_id             = aws_internet_gateway.ig[0].id
+}
+resource "aws_route" "private_nat_gateway" {
+ count = var.environment == "develop" ? 1 : 0
+ route_table_id         = aws_route_table.private[0].id
+ destination_cidr_block = "0.0.0.0/0"
+ nat_gateway_id         = aws_nat_gateway.nat[0].id
+}
+/* Route table associations */
+resource "aws_route_table_association" "public" {
+ count          = var.environment == "develop" ? length(data.aws_availability_zones.available.names) : 0
+ subnet_id      = element(aws_subnet.public_subnet.*.id, count.index)
+ route_table_id = aws_route_table.public[0].id
+}
+resource "aws_route_table_association" "private" {
+ count          = var.environment == "develop" ? length(data.aws_availability_zones.available.names) : 0
+ subnet_id      = element(aws_subnet.private_subnet.*.id, count.index)
+ route_table_id = aws_route_table.private[0].id
+}
 // /* Gateway endpoints creation and association */
 // resource "aws_vpc_endpoint" "s3" {
 //   vpc_id       = aws_vpc.vpc.id
