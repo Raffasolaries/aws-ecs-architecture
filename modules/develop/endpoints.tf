@@ -73,7 +73,7 @@ resource "aws_security_group" "vpce" {
   from_port        = 0
   to_port          = 0
   protocol         = "-1"
-  cidr_blocks      = [for i in range(length(data.aws_availability_zones.available.names)) : cidrsubnet(var.vpc_cidr, var.subnets_newbits, i)]
+  cidr_blocks      = [for i in range(length(data.aws_availability_zones.available[0].names)) : cidrsubnet(var.vpc_cidr, var.subnets_newbits, i)]
  }
 
  egress {

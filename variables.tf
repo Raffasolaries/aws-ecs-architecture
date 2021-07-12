@@ -34,6 +34,11 @@ variable "subnets_newbits" {
  description = "the difference between subnet mask and network mask"
 }
 
+variable "domain" {
+ type = string
+ description = "Base domain of the app (without subdomain)"
+}
+
 variable "task_port" {
  type = number
  description = "Application exposed port to Load Balancer"

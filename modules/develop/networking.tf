@@ -1,4 +1,5 @@
 data "aws_availability_zones" "available" {
+ count = var.environment == "develop" ? 1 : 0
  state = "available"
 }
 /*==== The VPC ======*/
@@ -45,25 +46,25 @@ resource "aws_nat_gateway" "nat" {
 }
 /* Private subnet */
 resource "aws_subnet" "private_subnet" {
- count = var.environment == "develop" ? length(data.aws_availability_zones.available.names) : 0
+ count = var.environment == "develop" ? length(data.aws_availability_zones.available[0].names) : 0
  vpc_id = aws_vpc.vpc[0].id
  cidr_block              = cidrsubnet(var.vpc_cidr, var.subnets_newbits, count.index)
- availability_zone       = element(data.aws_availability_zones.available.names, count.index)
+ availability_zone       = element(data.aws_availability_zones.available[0].names, count.index)
  map_public_ip_on_launch = false
  tags = {
-  Name        = join("-", [var.environment, element(data.aws_availability_zones.available.names, count.index), "private-subnet"])
+  Name        = join("-", [var.environment, element(data.aws_availability_zones.available[0].names, count.index), "private-subnet"])
   Environment = var.environment
  }
 }
 /* Public subnet */
 resource "aws_subnet" "public_subnet" {
- count = var.environment == "develop" ? length(data.aws_availability_zones.available.names) : 0
+ count = var.environment == "develop" ? length(data.aws_availability_zones.available[0].names) : 0
  vpc_id                  = aws_vpc.vpc[0].id
- cidr_block              = cidrsubnet(var.vpc_cidr, var.subnets_newbits, count.index+(length(data.aws_availability_zones.available.names)))
- availability_zone       = element(data.aws_availability_zones.available.names, count.index)
+ cidr_block              = cidrsubnet(var.vpc_cidr, var.subnets_newbits, count.index+(length(data.aws_availability_zones.available[0].names)))
+ availability_zone       = element(data.aws_availability_zones.available[0].names, count.index)
  map_public_ip_on_launch = true
  tags = {
-  Name        = join("-", [var.environment, element(data.aws_availability_zones.available.names, count.index), "public-subnet"])
+  Name        = join("-", [var.environment, element(data.aws_availability_zones.available[0].names, count.index), "public-subnet"])
   Environment = var.environment
  }
 }
@@ -100,12 +101,12 @@ resource "aws_route" "private_nat_gateway" {
 }
 /* Route table associations */
 resource "aws_route_table_association" "public" {
- count          = var.environment == "develop" ? length(data.aws_availability_zones.available.names) : 0
+ count          = var.environment == "develop" ? length(data.aws_availability_zones.available[0].names) : 0
  subnet_id      = element(aws_subnet.public_subnet[*].id, count.index)
  route_table_id = aws_route_table.public[0].id
 }
 resource "aws_route_table_association" "private" {
- count          = var.environment == "develop" ? length(data.aws_availability_zones.available.names) : 0
+ count          = var.environment == "develop" ? length(data.aws_availability_zones.available[0].names) : 0
  subnet_id      = element(aws_subnet.private_subnet[*].id, count.index)
  route_table_id = aws_route_table.private[0].id
 }

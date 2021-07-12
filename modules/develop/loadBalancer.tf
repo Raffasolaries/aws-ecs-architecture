@@ -24,16 +24,16 @@ resource "aws_security_group" "alb" {
 
  ingress {
   from_port = 80
-  to_port   = 0
-  protocol  = "HTTP"
+  to_port   = 80
+  protocol  = "TCP"
   cidr_blocks      = ["0.0.0.0/0"]
   ipv6_cidr_blocks = ["::/0"]
  }
 
  ingress {
   from_port = 443
-  to_port   = 0
-  protocol  = "TLS"
+  to_port   = 443
+  protocol  = "TCP"
   cidr_blocks      = ["0.0.0.0/0"]
   ipv6_cidr_blocks = ["::/0"]
  }
@@ -73,6 +73,7 @@ resource "aws_lb_listener" "https_default" {
  load_balancer_arn = aws_lb.alb[0].arn
  port              = 443
  protocol          = "HTTPS"
+ certificate_arn = var.certificate_arn
 
  default_action {
   type = "fixed-response"
