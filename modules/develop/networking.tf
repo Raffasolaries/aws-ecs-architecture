@@ -116,19 +116,21 @@ resource "aws_security_group" "default" {
  description = "Default security group to allow inbound/outbound from the VPC"
  vpc_id      = aws_vpc.vpc[0].id
  depends_on  = [aws_vpc.vpc]
+
  ingress {
-   from_port = "0"
-   to_port   = "0"
-   protocol  = "-1"
-   self      = "true"
+  from_port = "0"
+  to_port   = "0"
+  protocol  = "-1"
+  self      = "true"
  }
  
  egress {
-   from_port = "0"
-   to_port   = "0"
-   protocol  = "-1"
-   self      = "true"
+  from_port = "0"
+  to_port   = "0"
+  protocol  = "-1"
+  self      = "true"
  }
+
  tags = {
   Name = join("-", [var.environment, var.platform_name, "default-sg"])
   Environment = var.environment
