@@ -28,3 +28,8 @@ variable "subnets_newbits" {
  type = number
  description = "the difference between subnet mask and network mask"
 }
+
+variable "task_port" {
+ type = number
+ description = "Application exposed port to Load Balancer"
+}

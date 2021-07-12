@@ -36,7 +36,7 @@ resource "aws_eip" "nat_eip" {
 resource "aws_nat_gateway" "nat" {
  count = var.environment == "develop" ? 1 : 0
  allocation_id = aws_eip.nat_eip[0].id
- subnet_id     = element(aws_subnet.public_subnet.*.id, 0)
+ subnet_id     = element(aws_subnet.public_subnet[*].id, 0)
  depends_on    = [aws_internet_gateway.ig]
  tags = {
   Name        = join("-", [var.environment, var.platform_name, "nat"])
@@ -101,12 +101,12 @@ resource "aws_route" "private_nat_gateway" {
 /* Route table associations */
 resource "aws_route_table_association" "public" {
  count          = var.environment == "develop" ? length(data.aws_availability_zones.available.names) : 0
- subnet_id      = element(aws_subnet.public_subnet.*.id, count.index)
+ subnet_id      = element(aws_subnet.public_subnet[*].id, count.index)
  route_table_id = aws_route_table.public[0].id
 }
 resource "aws_route_table_association" "private" {
  count          = var.environment == "develop" ? length(data.aws_availability_zones.available.names) : 0
- subnet_id      = element(aws_subnet.private_subnet.*.id, count.index)
+ subnet_id      = element(aws_subnet.private_subnet[*].id, count.index)
  route_table_id = aws_route_table.private[0].id
 }
 /*==== VPC's Default Security Group ======*/
