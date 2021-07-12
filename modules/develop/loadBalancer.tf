@@ -7,7 +7,7 @@ resource "aws_lb" "alb" {
  security_groups    = [aws_security_group.alb[0].id]
  subnets            = aws_subnet.public_subnet[*].id
 
- enable_deletion_protection = true
+ enable_deletion_protection = false
 
  tags = {
   Name = join("-", [var.environment, var.platform_name, "alb"])
