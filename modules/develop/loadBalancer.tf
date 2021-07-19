@@ -1,7 +1,7 @@
 /* Application Load Balncer */
 resource "aws_lb" "alb" {
- count = var.environment == "develop" ? 1 : 0
- name               = join("-", [var.environment, var.platform_name, "alb"])
+ count = contains(var.environments, "develop") ? 1 : 0
+ name               = join("-", ["develop", var.platform_name, "alb"])
  internal           = false
  load_balancer_type = "application"
  security_groups    = [aws_security_group.alb[0].id]
@@ -10,14 +10,14 @@ resource "aws_lb" "alb" {
  enable_deletion_protection = false
 
  tags = {
-  Name = join("-", [var.environment, var.platform_name, "alb"])
-  Environment = var.environment
+  Name = join("-", ["develop", var.platform_name, "alb"])
+  Environment = "develop"
  }
 }
 /*==== ALB Security Group ======*/
 resource "aws_security_group" "alb" {
- count = var.environment == "develop" ? 1 : 0
- name        = join("-", [var.environment, var.platform_name, "alb-sg"])
+ count = contains(var.environments, "develop") ? 1 : 0
+ name        = join("-", ["develop", var.platform_name, "alb-sg"])
  description = "Application Load Balancer security group to allow inbound/outbound from HTTPS to ECS tasks"
  vpc_id      = aws_vpc.vpc[0].id
  depends_on  = [aws_vpc.vpc]
@@ -46,13 +46,13 @@ resource "aws_security_group" "alb" {
  }
 
  tags = {
-  Name = join("-", [var.environment, var.platform_name, "default-sg"])
-  Environment = var.environment
+  Name = join("-", ["develop", var.platform_name, "default-sg"])
+  Environment = "develop"
  }
 }
 /* Default HTTP 80 redirect rule */
 resource "aws_lb_listener" "http_redirect" {
- count = var.environment == "develop" ? 1 : 0
+ count = contains(var.environments, "develop") ? 1 : 0
  load_balancer_arn = aws_lb.alb[0].arn
  port              = 80
  protocol          = "HTTP"
@@ -69,7 +69,7 @@ resource "aws_lb_listener" "http_redirect" {
 }
 /* Default Action HTTPS not routed */
 resource "aws_lb_listener" "https_default" {
- count = var.environment == "develop" ? 1 : 0
+ count = contains(var.environments, "develop") ? 1 : 0
  load_balancer_arn = aws_lb.alb[0].arn
  port              = 443
  protocol          = "HTTPS"

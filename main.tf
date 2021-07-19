@@ -6,7 +6,7 @@ resource "aws_acm_certificate" "cert" {
 
  tags = {
   Name = join("-", [var.region, var.domain, "certificate"])
-  Environment = var.environment
+  Environment = "all"
  }
 
  lifecycle {

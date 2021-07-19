@@ -1,6 +1,6 @@
 /* Target group */
 // resource "aws_lb_target_group" "instance" {
-//  name        = join("-", [var.environment, var.app_name, "tg"])
+//  name        = join("-", ["develop", var.app_name, "tg"])
 //  port        = var.task_port
 //  protocol    = "HTTP"
 //  target_type = "instance"
@@ -17,7 +17,7 @@
 //  }
 
 //  tags = {
-//   Name = join("-", [var.environment, var.app_name, "tg"])
-//   Environment = var.environment
+//   Name = join("-", ["develop", var.app_name, "tg"])
+//   Environment = "develop"
 //  }
 // }

@@ -4,9 +4,9 @@ variable "region" {
  default = "eu-south-1"
 }
 
-variable "environment" {
- type = string
- description = "referral environment"
+variable "environments" {
+ type = list
+ description = "referral environments"
 }
 
 variable "platform_name" {
@@ -14,8 +14,8 @@ variable "platform_name" {
  type = string
 }
 
-variable "app_name" {
- type = string
+variable "app_names" {
+ type = list
  description = "Application name"
 }
 
