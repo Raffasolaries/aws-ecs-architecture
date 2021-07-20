@@ -85,3 +85,45 @@ resource "aws_lb_listener" "https_default" {
   }
  }
 }
+/* Load Balancer's Target groups */
+resource "aws_lb_target_group" "ip" {
+ count = contains(var.environments, "develop") ? length(var.app_names) : 0
+ name        = join("-", ["develop", var.app_names[count.index], "tg"])
+ port        = var.task_port
+ protocol    = "HTTP"
+ target_type = "ip"
+ vpc_id      = aws_vpc.vpc[0].id
+
+ health_check {
+  matcher = "200-299"
+  path = "/"
+ }
+
+ stickiness {
+  enabled = true
+  cookie_name = join("-", ["develop", var.app_names[count.index], "alb"])
+  type = "app_cookie"
+ }
+
+ tags = {
+  Name = join("-", ["develop", var.app_names[count.index], "tg"])
+  Environment = "develop"
+ }
+}
+/* HTTPS listener rules */
+resource "aws_lb_listener_rule" "host_based_routing" {
+ count = contains(var.environments, "develop") ? length(var.app_names) : 0
+ listener_arn = aws_lb_listener.https_default[0].arn
+ priority     = 100
+
+ action {
+  type             = "forward"
+  target_group_arn = aws_lb_target_group.ip[count.index].arn
+ }
+
+ condition {
+  host_header {
+   values = [join(".", [var.app_names[count.index], var.domain])]
+  }
+ }
+}
