@@ -5,8 +5,8 @@ resource "aws_vpc" "vpc" {
  enable_dns_hostnames = true
  enable_dns_support   = true
  tags = {
-  Name        = join("-", ["develop", var.platform_name, "vpc"])
-  Environment = "develop"
+  Name        = join("-", ["staging", var.platform_name, "vpc"])
+  Environment = "staging"
  }
 }
 /*==== Subnets ======*/
@@ -15,8 +15,8 @@ resource "aws_internet_gateway" "ig" {
  count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
  vpc_id = aws_vpc.vpc[0].id
  tags = {
-   Name        = join("-", ["develop", var.platform_name, "igw"])
-   Environment = "develop"
+   Name        = join("-", ["staging", var.platform_name, "igw"])
+   Environment = "staging"
  }
 }
 /* Elastic IP for NAT */
@@ -25,8 +25,8 @@ resource "aws_eip" "nat_eip" {
  vpc        = true
  depends_on = [aws_internet_gateway.ig]
  tags = {
-  Name = join("-", ["develop", var.platform_name, "eip"])
-  Environment = "develop"
+  Name = join("-", ["staging", var.platform_name, "eip"])
+  Environment = "staging"
  }
 }
 /* NAT */
@@ -36,8 +36,8 @@ resource "aws_nat_gateway" "nat" {
  subnet_id     = element(aws_subnet.public_subnet[*].id, 0)
  depends_on    = [aws_internet_gateway.ig]
  tags = {
-  Name        = join("-", ["develop", var.platform_name, "nat"])
-  Environment = "develop"
+  Name        = join("-", ["staging", var.platform_name, "nat"])
+  Environment = "staging"
  }
 }
 /* Private subnet */
@@ -48,8 +48,8 @@ resource "aws_subnet" "private_subnet" {
  availability_zone       = element(var.availability_zones, count.index)
  map_public_ip_on_launch = false
  tags = {
-  Name        = join("-", ["develop", element(var.availability_zones, count.index), "private-subnet"])
-  Environment = "develop"
+  Name        = join("-", ["staging", element(var.availability_zones, count.index), "private-subnet"])
+  Environment = "staging"
  }
 }
 /* Public subnet */
@@ -60,8 +60,8 @@ resource "aws_subnet" "public_subnet" {
  availability_zone       = element(var.availability_zones, count.index)
  map_public_ip_on_launch = true
  tags = {
-  Name        = join("-", ["develop", element(var.availability_zones, count.index), "public-subnet"])
-  Environment = "develop"
+  Name        = join("-", ["staging", element(var.availability_zones, count.index), "public-subnet"])
+  Environment = "staging"
  }
 }
 /* Routing table for private subnet */
@@ -69,8 +69,8 @@ resource "aws_route_table" "private" {
  count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
  vpc_id = aws_vpc.vpc[0].id
  tags = {
-  Name        = join("-", ["develop", var.platform_name, "private-rt"])
-  Environment = "develop"
+  Name        = join("-", ["staging", var.platform_name, "private-rt"])
+  Environment = "staging"
  }
 }
 /* Routing table for public subnet */
@@ -78,8 +78,8 @@ resource "aws_route_table" "public" {
  count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
  vpc_id = aws_vpc.vpc[0].id
  tags = {
-  Name        = join("-", ["develop", var.platform_name, "public-rt"])
-  Environment = "develop"
+  Name        = join("-", ["staging", var.platform_name, "public-rt"])
+  Environment = "staging"
  }
 }
 /* Routes */
@@ -109,7 +109,7 @@ resource "aws_route_table_association" "private" {
 /*==== VPC's Default Security Group ======*/
 resource "aws_security_group" "default" {
  count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
- name        = join("-", ["develop", var.platform_name, "default-sg"])
+ name        = join("-", ["staging", var.platform_name, "default-sg"])
  description = "Default security group to allow inbound/outbound from the VPC"
  vpc_id      = aws_vpc.vpc[0].id
  depends_on  = [aws_vpc.vpc]
@@ -129,7 +129,7 @@ resource "aws_security_group" "default" {
  }
 
  tags = {
-  Name = join("-", ["develop", var.platform_name, "default-sg"])
-  Environment = "develop"
+  Name = join("-", ["staging", var.platform_name, "default-sg"])
+  Environment = "staging"
  }
 }

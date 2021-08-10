@@ -1,7 +1,7 @@
 /* Application Load Balncer */
 resource "aws_lb" "alb" {
  count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
- name               = join("-", ["develop", var.platform_name, "alb"])
+ name               = join("-", ["staging", var.platform_name, "alb"])
  internal           = false
  load_balancer_type = "application"
  security_groups    = [aws_security_group.alb[0].id]
@@ -10,14 +10,14 @@ resource "aws_lb" "alb" {
  enable_deletion_protection = false
 
  tags = {
-  Name = join("-", ["develop", var.platform_name, "alb"])
-  Environment = "develop"
+  Name = join("-", ["staging", var.platform_name, "alb"])
+  Environment = "staging"
  }
 }
 /*==== ALB Security Group ======*/
 resource "aws_security_group" "alb" {
  count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
- name        = join("-", ["develop", var.platform_name, "alb-sg"])
+ name        = join("-", ["staging", var.platform_name, "alb-sg"])
  description = "Application Load Balancer security group to allow inbound/outbound from HTTPS to ECS tasks"
  vpc_id      = aws_vpc.vpc[0].id
  depends_on  = [aws_vpc.vpc]
@@ -46,8 +46,8 @@ resource "aws_security_group" "alb" {
  }
 
  tags = {
-  Name = join("-", ["develop", var.platform_name, "default-sg"])
-  Environment = "develop"
+  Name = join("-", ["staging", var.platform_name, "default-sg"])
+  Environment = "staging"
  }
 }
 /* Default HTTP 80 redirect rule */

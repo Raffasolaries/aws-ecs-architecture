@@ -5,7 +5,7 @@ resource "aws_vpc_endpoint" "s3" {
  vpc_id       = aws_vpc.vpc[0].id
  service_name = join(".", ["com.amazonaws", var.region, "s3"])
  tags = {
-  Name = join("-", ["develop", var.platform_name, "s3-vpce"])
+  Name = join("-", ["staging", var.platform_name, "s3-vpce"])
   Environment = "staging"
  }
 }
@@ -16,8 +16,8 @@ resource "aws_vpc_endpoint" "dynamodb" {
  service_name = join(".", ["com.amazonaws", var.region, "dynamodb"])
 
  tags = {
-  Name = join("-", ["develop", var.platform_name, "dynamodb-vpce"])
-  Environment = "develop"
+  Name = join("-", ["staging", var.platform_name, "dynamodb-vpce"])
+  Environment = "staging"
  }
 }
 resource "aws_vpc_endpoint_route_table_association" "s3" {
@@ -41,8 +41,8 @@ resource "aws_vpc_endpoint" "cloudwatch" {
   aws_security_group.vpce[0].id,
  ]
  tags = {
-  Name = join("-", ["develop", var.platform_name, "cloudwatch-logs-vpce"])
-  Environment = "develop"
+  Name = join("-", ["staging", var.platform_name, "cloudwatch-logs-vpce"])
+  Environment = "staging"
  }
 }
 # ECR
@@ -57,14 +57,14 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
   aws_security_group.vpce[0].id,
  ]
  tags = {
-  Name = join("-", ["develop", var.platform_name, "ecr-vpce"])
-  Environment = "develop"
+  Name = join("-", ["staging", var.platform_name, "ecr-vpce"])
+  Environment = "staging"
  }
 }
 /* Interface Endpoints Security Group */
 resource "aws_security_group" "vpce" {
  count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
- name        = join("-", ["develop", var.platform_name, "vpce-sg"])
+ name        = join("-", ["staging", var.platform_name, "vpce-sg"])
  description = "Allow all traffic from private subnets"
  vpc_id      = aws_vpc.vpc[0].id
 
@@ -85,7 +85,7 @@ resource "aws_security_group" "vpce" {
  }
 
  tags = {
-  Name = join("-", ["develop", var.platform_name, "vpce-sg"])
-  Environment = "develop"
+  Name = join("-", ["staging", var.platform_name, "vpce-sg"])
+  Environment = "staging"
  }
 }
