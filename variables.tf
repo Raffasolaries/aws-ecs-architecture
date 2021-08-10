@@ -43,3 +43,13 @@ variable "task_port" {
  type = number
  description = "Application exposed port to Load Balancer"
 }
+
+variable "task_execution_role_arn" {
+ type = string
+ description = "ECS Tasks Execution role arn"
+}
+
+variable "task_role_arn" {
+ type = string
+ description = "ECS Tasks Execution role arn"
+}

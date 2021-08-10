@@ -1,17 +1,17 @@
 /* Gateway endpoints creation and association */
 // S3
 resource "aws_vpc_endpoint" "s3" {
- count = contains(var.environments, "develop") ? 1 : 0
+ count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
  vpc_id       = aws_vpc.vpc[0].id
  service_name = join(".", ["com.amazonaws", var.region, "s3"])
  tags = {
   Name = join("-", ["develop", var.platform_name, "s3-vpce"])
-  Environment = "develop"
+  Environment = "staging"
  }
 }
 // DynamoDB
 resource "aws_vpc_endpoint" "dynamodb" {
- count = contains(var.environments, "develop") ? 1 : 0
+ count = contains(var.environments, "develop")|| contains(var.environments, "latest") ? 1 : 0
  vpc_id       = aws_vpc.vpc[0].id
  service_name = join(".", ["com.amazonaws", var.region, "dynamodb"])
 
@@ -21,18 +21,18 @@ resource "aws_vpc_endpoint" "dynamodb" {
  }
 }
 resource "aws_vpc_endpoint_route_table_association" "s3" {
- count = contains(var.environments, "develop") ? 1 : 0
+ count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
  route_table_id  = aws_route_table.private[0].id
  vpc_endpoint_id = aws_vpc_endpoint.s3[0].id
 }
 resource "aws_vpc_endpoint_route_table_association" "dynamodb" {
- count = contains(var.environments, "develop") ? 1 : 0
+ count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
  route_table_id  = aws_route_table.private[0].id
  vpc_endpoint_id = aws_vpc_endpoint.dynamodb[0].id
 }
 # CloudWatch
 resource "aws_vpc_endpoint" "cloudwatch" {
- count = contains(var.environments, "develop") ? 1 : 0
+ count = contains(var.environments, "develop")|| contains(var.environments, "latest") ? 1 : 0
  vpc_id       = aws_vpc.vpc[0].id
  service_name = join(".", ["com.amazonaws", var.region, "logs"])
  vpc_endpoint_type = "Interface"
@@ -47,7 +47,7 @@ resource "aws_vpc_endpoint" "cloudwatch" {
 }
 # ECR
 resource "aws_vpc_endpoint" "ecr_dkr" {
- count = contains(var.environments, "develop") ? 1 : 0
+ count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
  vpc_id       = aws_vpc.vpc[0].id
  service_name = join(".", ["com.amazonaws", var.region, "ecr.dkr"])
  vpc_endpoint_type = "Interface"
@@ -63,7 +63,7 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
 }
 /* Interface Endpoints Security Group */
 resource "aws_security_group" "vpce" {
- count = contains(var.environments, "develop") ? 1 : 0
+ count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
  name        = join("-", ["develop", var.platform_name, "vpce-sg"])
  description = "Allow all traffic from private subnets"
  vpc_id      = aws_vpc.vpc[0].id
@@ -73,7 +73,7 @@ resource "aws_security_group" "vpce" {
   from_port        = 0
   to_port          = 0
   protocol         = "-1"
-  cidr_blocks      = [for i in range(length(data.aws_availability_zones.available[0].names)) : cidrsubnet(var.vpc_cidr, var.subnets_newbits, i)]
+  cidr_blocks      = [for i in range(length(var.availability_zones)) : cidrsubnet(var.vpc_cidr, var.subnets_newbits, i)]
  }
 
  egress {

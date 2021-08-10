@@ -4,6 +4,11 @@ variable "region" {
  default = "eu-south-1"
 }
 
+variable "availability_zones" {
+ description = "Selected region Availability Zones"
+ type = list
+}
+
 variable "environments" {
  type = list
  description = "referral environments"
@@ -42,4 +47,14 @@ variable "certificate_arn" {
 variable "task_port" {
  type = number
  description = "Application exposed port to Load Balancer"
+}
+
+variable "task_execution_role_arn" {
+ type = string
+ description = "ECS Tasks Execution role arn"
+}
+
+variable "task_role_arn" {
+ type = string
+ description = "ECS Tasks Execution role arn"
 }
