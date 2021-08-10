@@ -32,4 +32,10 @@ module "develop" {
  task_port = var.task_port
  task_execution_role_arn = var.task_execution_role_arn
  task_role_arn = var.task_role_arn
+ service_role = var.service_role
+}
+
+module "latest" {
+ source = "./modules/latest"
+ service_role = var.service_role
 }

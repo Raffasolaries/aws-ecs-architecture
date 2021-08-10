@@ -53,3 +53,8 @@ variable "task_role_arn" {
  type = string
  description = "ECS Tasks Execution role arn"
 }
+
+variable "service_role" {
+ type = string
+ description = "ECS Services role"
+}

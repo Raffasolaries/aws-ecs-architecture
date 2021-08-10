@@ -133,3 +133,43 @@ resource "aws_security_group" "default" {
   Environment = "staging"
  }
 }
+# ECS Service security group
+resource "aws_security_group" "service" {
+ count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
+ name        = join("-", ["staging", var.platform_name, "service-sg"])
+ description = "Allows ECS services to communicate with Docker applications"
+ vpc_id = aws_vpc.vpc[0].id
+
+ ingress = [
+  {
+   description      = "Allows traffic in the same VPC"
+   from_port        = 8080
+   to_port          = 8080
+   protocol         = "tcp"
+   prefix_list_ids = []
+   security_groups = []
+   cidr_blocks      = [var.vpc_cidr]
+   ipv6_cidr_blocks = []
+   self = false
+  }
+ ]
+
+ egress = [
+  {
+   description      = "Allows outbound traffic anywhere"
+   from_port        = 0
+   to_port          = 0
+   protocol         = "-1"
+   prefix_list_ids = [aws_vpc_endpoint.s3[0].prefix_list_id, aws_vpc_endpoint.dynamodb[0].prefix_list_id]
+   security_groups = []
+   cidr_blocks      = ["0.0.0.0/0"]
+   ipv6_cidr_blocks = ["::/0"]
+   self = false
+  }
+ ]
+
+ tags = {
+  Name = join("-", ["staging", var.platform_name, "service-sg"])
+  Environment = "staging"
+ }
+}

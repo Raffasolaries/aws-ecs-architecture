@@ -26,4 +26,6 @@ resource "aws_ecs_task_definition" "tasks" {
   type       = "memberOf"
   expression = join("", ["attribute:ecs.availability-zone in [", join(", ", var.availability_zones), "]"])
  }
+
+ 
 }

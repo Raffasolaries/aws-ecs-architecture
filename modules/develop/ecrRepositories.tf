@@ -1,3 +1,4 @@
+# Creating referred repositories
 resource "aws_ecr_repository" "staging" {
  count = contains(var.environments, "develop") || contains(var.environments, "latest") ? length(var.app_names) : 0
  name  = join("-", ["staging", var.app_names[count.index], "ecr-repository"])
