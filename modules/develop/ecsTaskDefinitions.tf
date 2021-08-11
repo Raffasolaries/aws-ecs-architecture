@@ -11,8 +11,16 @@ resource "aws_ecs_task_definition" "tasks" {
    essential = true
    network_mode = "awsvpc"
    requires_compatibilities = ["EC2"]
+   logConfiguration = {
+    logDriver = "awslogs"
+    options = {
+     awslogs-group = "/ecs/tantosvago30-task"
+     awslogs-region = "eu-west-3"
+     awslogs-stream-prefix = "ecs"
+    }
+   }
    ephemeral_storage = {
-    size_in_gib = 50
+    size_in_gib = 5
    }
    portMappings = [
     {
@@ -25,7 +33,5 @@ resource "aws_ecs_task_definition" "tasks" {
  placement_constraints {
   type       = "memberOf"
   expression = join("", ["attribute:ecs.availability-zone in [", join(", ", var.availability_zones), "]"])
- }
-
- 
+ } 
 }

@@ -14,42 +14,6 @@ resource "aws_lb" "alb" {
   Environment = "staging"
  }
 }
-/*==== ALB Security Group ======*/
-resource "aws_security_group" "alb" {
- count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
- name        = join("-", ["staging", var.platform_name, "alb-sg"])
- description = "Application Load Balancer security group to allow inbound/outbound from HTTPS to ECS tasks"
- vpc_id      = aws_vpc.vpc[0].id
- depends_on  = [aws_vpc.vpc]
-
- ingress {
-  from_port = 80
-  to_port   = 80
-  protocol  = "TCP"
-  cidr_blocks      = ["0.0.0.0/0"]
-  ipv6_cidr_blocks = ["::/0"]
- }
-
- ingress {
-  from_port = 443
-  to_port   = 443
-  protocol  = "TCP"
-  cidr_blocks      = ["0.0.0.0/0"]
-  ipv6_cidr_blocks = ["::/0"]
- }
- 
- egress {
-  from_port = 0
-  to_port   = 0
-  protocol  = -1
-  cidr_blocks      = ["0.0.0.0/0"]
- }
-
- tags = {
-  Name = join("-", ["staging", var.platform_name, "default-sg"])
-  Environment = "staging"
- }
-}
 /* Default HTTP 80 redirect rule */
 resource "aws_lb_listener" "http_redirect" {
  count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
@@ -93,7 +57,7 @@ resource "aws_lb_listener_rule" "host_based_routing" {
 
  action {
   type             = "forward"
-  target_group_arn = aws_lb_target_group.ip[count.index].arn
+  target_group_arn = aws_lb_target_group.instances[count.index].arn
  }
 
  condition {

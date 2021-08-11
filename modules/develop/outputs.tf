@@ -10,7 +10,7 @@ output "private_subnet_ids" {
 
 output "service_security_group_id" {
  description = "Security Group allows communication from ECS service to Docker containers"
- value = aws_security_group.service[0].id
+ value = aws_security_group.instances[0].id
 } 
 
 output "ecr_repositories" {
