@@ -5,7 +5,7 @@ resource "aws_ecs_task_definition" "tasks" {
   [
    {
     "name": "${join("-", ["develop", var.app_names[count.index], "container"])}",
-    "image": "${aws_ecr_repository.staging[count.index].name}",
+    "image": "${aws_ecr_repository.staging[count.index].repository_url}",
     "memoryReservation": null,
     "resourceRequirements": null,
     "essential": true,

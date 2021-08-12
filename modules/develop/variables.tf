@@ -58,3 +58,8 @@ variable "task_role_arn" {
  type = string
  description = "ECS Tasks Execution role arn"
 }
+
+variable "iam_instance_role_name" {
+ type = string
+ description = "IAM instance role name"
+}

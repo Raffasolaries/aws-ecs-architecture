@@ -32,6 +32,7 @@ module "develop" {
  task_port = var.task_port
  task_execution_role_arn = var.task_execution_role_arn
  task_role_arn = var.task_role_arn
+ iam_instance_role_name = var.iam_instance_role_name
 }
 
 module "latest" {
