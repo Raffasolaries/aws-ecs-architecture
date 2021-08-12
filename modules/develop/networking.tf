@@ -98,11 +98,11 @@ resource "aws_route" "private_nat_gateway" {
 /* Route table associations */
 resource "aws_route_table_association" "public" {
  count          = contains(var.environments, "develop") || contains(var.environments, "latest") ? length(var.availability_zones) : 0
- subnet_id      = element(aws_subnet.public_subnet[*].id, count.index)
+ subnet_id      = aws_subnet.public_subnet[count.index].id
  route_table_id = aws_route_table.public[0].id
 }
 resource "aws_route_table_association" "private" {
  count          = contains(var.environments, "develop") || contains(var.environments, "latest") ? length(var.availability_zones) : 0
- subnet_id      = element(aws_subnet.private_subnet[*].id, count.index)
+ subnet_id      = aws_subnet.private_subnet[count.index].id
  route_table_id = aws_route_table.private[0].id
 }

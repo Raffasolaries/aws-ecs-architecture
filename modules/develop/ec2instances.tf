@@ -46,21 +46,27 @@ data "aws_ami_ids" "amazon" {
 // }
 
 resource "aws_instance" "web" {
- count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 2 : 0
+ count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 3 : 0
  ami           = data.aws_ami_ids.amazon[0].ids[0]
  // launch_template = aws_launch_configuration.ecs_optimized[0].id
  instance_type = "t3.micro"
  source_dest_check = false
+ subnet_id                   = aws_subnet.private_subnet[count.index].id
  // placement_group = aws_placement_group.ecs_optimized[0].id
 
  monitoring = true
 
- vpc_security_group_ids = [aws_security_group.instances[0].id, aws_security_group.vpce[0].id]
+ user_data = <<EOF
+   #!/bin/bash
+   echo ECS_CLUSTER=${join("-", ["staging", var.platform_name])} >> /etc/ecs/ecs.config
+  EOF
+
+ vpc_security_group_ids = [aws_security_group.instances[0].id]
 
  root_block_device {
   encrypted = true
   volume_type = "gp3"
-  volume_size = 10
+  volume_size = 30
  }
 
  tags = {

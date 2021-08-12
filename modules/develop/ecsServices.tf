@@ -2,9 +2,8 @@
 resource "aws_ecs_service" "services" {
  count = contains(var.environments, "develop") ? length(var.app_names) : 0
  name = join("-", ["develop", var.app_names[count.index], "service"])
- cluster = aws_vpc.vpc[0].arn
+ cluster = aws_ecs_cluster.staging[0].id
  task_definition = aws_ecs_task_definition.tasks[count.index].arn
- iam_role = var.service_role
  enable_execute_command = true
 
  launch_type = "EC2"
