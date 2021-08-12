@@ -18,6 +18,16 @@ data "aws_availability_zones" "available" {
  state = "available"
 }
 
+# Create cloudwatch logs group
+resource "aws_cloudwatch_log_group" "ecs_tasks" {
+ count = length(var.app_names)
+ name = "/ecs/${var.app_names[count.index]}-logs"
+
+ tags = {
+  Name = "/ecs/${var.app_names[count.index]}-logs"
+ }
+}
+
 module "develop" {
  source = "./modules/develop"
  region = var.region
@@ -33,6 +43,7 @@ module "develop" {
  task_execution_role_arn = var.task_execution_role_arn
  task_role_arn = var.task_role_arn
  iam_instance_role_name = var.iam_instance_role_name
+ cloudwatch_groups = aws_cloudwatch_log_group.ecs_tasks[*].name
 }
 
 module "latest" {

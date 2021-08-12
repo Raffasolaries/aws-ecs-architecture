@@ -26,7 +26,7 @@ resource "aws_ecs_task_definition" "tasks" {
     "logConfiguration": {
      "logDriver": "awslogs",
      "options": {
-      "awslogs-group": "${join("-", ["/ecs/develop", var.app_names[count.index], "task"])}",
+      "awslogs-group": "${var.cloudwatch_groups[count.index]}",
       "awslogs-region": "${var.region}",
       "awslogs-stream-prefix": "ecs"
      }
