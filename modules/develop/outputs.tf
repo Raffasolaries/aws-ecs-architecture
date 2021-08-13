@@ -33,11 +33,6 @@ output "alb_listener_https_default_arn" {
  value = aws_lb_listener.https_default[0].arn
 }
 
-output "alb_target_groups_instances_arns" {
- description = "Staging Target Groups ARNs"
- value = aws_lb_target_group.instances[*].arn
-}
-
 output "private_subnets_ids" {
  description = "Private Subnets IDs"
  value = aws_subnet.private_subnet[*].id

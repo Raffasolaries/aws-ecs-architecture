@@ -58,7 +58,6 @@ module "latest" {
  domain = var.domain
  vpc_id = module.develop.vpc_id
  alb_listener_https_default_arn = module.develop.alb_listener_https_default_arn
- alb_target_groups_instances_arns = module.develop.alb_target_groups_instances_arns
  ecs_cluster_id = module.develop.ecs_cluster_id
  ecr_repositories_urls = module.develop.ecr_repositories_urls
  private_subnets_ids = module.develop.private_subnets_ids

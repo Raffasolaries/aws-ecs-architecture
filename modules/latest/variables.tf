@@ -59,11 +59,6 @@ variable "alb_listener_https_default_arn" {
  type = string
 }
 
-variable "alb_target_groups_instances_arns" {
- description = "Staging ALB Instances Target Groups ARNs"
- type = list
-}
-
 variable "private_subnets_ids" {
  description = "Staging Private Subnets IDs"
  type = list

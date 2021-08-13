@@ -12,7 +12,7 @@ resource "aws_ecs_service" "services" {
  deployment_minimum_healthy_percent = 0
 
  load_balancer {
-  target_group_arn = var.alb_target_groups_instances_arns[count.index]
+  target_group_arn = aws_lb_target_group.instances[count.index].arn
   container_name   = join("-", ["latest", var.app_names[count.index], "container"])
   container_port   = 8080
  }
