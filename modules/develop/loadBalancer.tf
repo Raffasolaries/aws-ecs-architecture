@@ -51,9 +51,9 @@ resource "aws_lb_listener" "https_default" {
 }
 /* HTTPS listener rules */
 resource "aws_lb_listener_rule" "host_based_routing" {
- count = contains(var.environments, "develop") || contains(var.environments, "latest") ? length(var.app_names) : 0
+ count = contains(var.environments, "develop") ? length(var.app_names) : 0
  listener_arn = aws_lb_listener.https_default[0].arn
- priority     = 100
+ priority     = (50000-length(var.app_names))+count.index
 
  action {
   type             = "forward"
@@ -62,7 +62,7 @@ resource "aws_lb_listener_rule" "host_based_routing" {
 
  condition {
   host_header {
-   values = [join(".", [var.app_names[count.index], var.domain])]
+   values = ["dev-${var.app_names[count.index]}.${var.domain}"]
   }
  }
 }

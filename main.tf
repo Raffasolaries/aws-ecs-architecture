@@ -23,6 +23,8 @@ resource "aws_cloudwatch_log_group" "ecs_tasks" {
  count = length(var.app_names)
  name = "/ecs/${var.app_names[count.index]}-logs"
 
+ retention_in_days = 90
+
  tags = {
   Name = "/ecs/${var.app_names[count.index]}-logs"
  }
@@ -48,4 +50,21 @@ module "develop" {
 
 module "latest" {
  source = "./modules/latest"
+ region = var.region
+ availability_zones = data.aws_availability_zones.available.names
+ environments = var.environments
+ platform_name = var.platform_name
+ app_names = var.app_names
+ domain = var.domain
+ vpc_id = module.develop.vpc_id
+ alb_listener_https_default_arn = module.develop.alb_listener_https_default_arn
+ alb_target_groups_instances_arns = module.develop.alb_target_groups_instances_arns
+ ecs_cluster_id = module.develop.ecs_cluster_id
+ ecr_repositories_urls = module.develop.ecr_repositories_urls
+ private_subnets_ids = module.develop.private_subnets_ids
+ task_port = var.task_port
+ task_execution_role_arn = var.task_execution_role_arn
+ task_role_arn = var.task_role_arn
+ instances_security_group_id = module.develop.instances_security_group_id
+ cloudwatch_groups = aws_cloudwatch_log_group.ecs_tasks[*].name
 }
