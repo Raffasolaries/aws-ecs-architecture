@@ -8,6 +8,7 @@ resource "aws_kms_key" "cluster_logs_key" {
 resource "aws_cloudwatch_log_group" "cluster_logs_key" {
  count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 1 : 0
  name = join("-", ["staging", var.platform_name, "ecs-cluster-logs"])
+ retention_in_days = 731
 }
 
 resource "aws_ecs_cluster" "staging" {
