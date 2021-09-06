@@ -1,3 +1,9 @@
+# Retrieved data
+data "aws_ecs_task_definition" "tasks" {
+ count = contains(var.environments, "latest") ? length(var.app_names) : 0
+ task_definition = aws_ecs_task_definition.tasks[count.index].family
+}
+# New Resource
 resource "aws_ecs_task_definition" "tasks" {
  count = contains(var.environments, "latest") ? length(var.app_names) : 0
  family = join("-", ["latest", var.app_names[count.index], "task"])

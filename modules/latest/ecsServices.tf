@@ -3,7 +3,7 @@ resource "aws_ecs_service" "services" {
  count = contains(var.environments, "latest") ? length(var.app_names) : 0
  name = join("-", ["latest", var.app_names[count.index], "service"])
  cluster = var.ecs_cluster_id
- task_definition = aws_ecs_task_definition.tasks[count.index].arn
+ task_definition = join(":", [aws_ecs_task_definition.tasks[count.index].family, max(aws_ecs_task_definition.tasks[count.index].revision, data.aws_ecs_task_definition.tasks[count.index].revision)])
  enable_execute_command = true
 
  launch_type = "EC2"
@@ -36,5 +36,10 @@ resource "aws_ecs_service" "services" {
  placement_constraints {
   type       = "memberOf"
   expression = join("", ["attribute:ecs.availability-zone in [", join(", ", var.availability_zones), "]"])
+ }
+
+ tags = {
+  "Name" = join("-", ["latest", var.app_names[count.index], "service"])
+  "Environemt" = "latest"
  }
 }
