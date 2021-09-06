@@ -67,3 +67,20 @@ module "latest" {
  instances_security_group_id = module.develop.instances_security_group_id
  cloudwatch_groups = aws_cloudwatch_log_group.ecs_tasks[*].name
 }
+
+module "production" {
+ source = "./modules/production"
+ region = var.region
+ availability_zones = data.aws_availability_zones.available.names
+ environments = var.environments
+ platform_name = var.platform_name
+ app_names = var.app_names
+ vpc_cidr = var.vpc_cidr
+ subnets_newbits = var.subnets_newbits
+ domain = var.domain
+ certificate_arn = aws_acm_certificate.cert.arn
+ task_port = var.task_port
+ task_execution_role_arn = var.task_execution_role_arn
+ task_role_arn = var.task_role_arn
+ cloudwatch_groups = aws_cloudwatch_log_group.ecs_tasks[*].name
+}
