@@ -37,7 +37,6 @@ resource "aws_lb_listener" "https_default" {
  load_balancer_arn = aws_lb.alb[0].arn
  port              = 443
  protocol          = "HTTPS"
- certificate_arn = var.certificate_arn
 
  default_action {
   type = "fixed-response"
@@ -49,9 +48,15 @@ resource "aws_lb_listener" "https_default" {
   }
  }
 }
+/* HTTPS Certificates */
+resource "aws_lb_listener_certificate" "listener_certs" {
+ count = contains(var.environments, "develop") || contains(var.environments, "latest") ? length(var.certificates_arn) : 0
+ listener_arn    = aws_lb_listener.https_default[0].arn
+ certificate_arn = var.certificates_arn[count.index]
+}
 /* HTTPS listener rules */
 resource "aws_lb_listener_rule" "host_based_routing" {
- count = contains(var.environments, "develop") ? length(var.app_names) : 0
+ count = contains(var.environments, "develop") ? length(var.apps) : 0
  listener_arn = aws_lb_listener.https_default[0].arn
  priority     = 5000-count.index
 
@@ -62,7 +67,7 @@ resource "aws_lb_listener_rule" "host_based_routing" {
 
  condition {
   host_header {
-   values = ["dev-${var.app_names[count.index]}.${var.domain}"]
+   values = ["dev-${var.apps[count.index].name}.${var.apps[count.index].domain}"]
   }
  }
 }

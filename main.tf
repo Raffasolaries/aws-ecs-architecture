@@ -1,11 +1,12 @@
 # Creates the certificate
 resource "aws_acm_certificate" "cert" {
- domain_name       = var.domain
+ count = length(var.domains)
+ domain_name       = var.domains[count.index]
  validation_method = "DNS"
- subject_alternative_names = [join(".", ["*", var.domain])]
+ subject_alternative_names = [join(".", ["*", var.domains[count.index]])]
 
  tags = {
-  Name = join("-", [var.region, var.domain, "certificate"])
+  Name = join("-", [var.region, var.domains[count.index], "certificate"])
   Environment = "all"
  }
 
@@ -20,13 +21,13 @@ data "aws_availability_zones" "available" {
 
 # Create cloudwatch logs group
 resource "aws_cloudwatch_log_group" "ecs_tasks" {
- count = length(var.app_names)
- name = "/ecs/${var.app_names[count.index]}-logs"
+ count = length(var.apps)
+ name = "/ecs/${var.apps[count.index].name}-logs"
 
  retention_in_days = 90
 
  tags = {
-  Name = "/ecs/${var.app_names[count.index]}-logs"
+  Name = "/ecs/${var.apps[count.index].name}-logs"
  }
 }
 
@@ -36,11 +37,11 @@ module "develop" {
  availability_zones = data.aws_availability_zones.available.names
  environments = var.environments
  platform_name = var.platform_name
- app_names = var.app_names
+ apps = var.apps
  vpc_cidr = var.vpc_cidr
  subnets_newbits = var.subnets_newbits
- domain = var.domain
- certificate_arn = aws_acm_certificate.cert.arn
+ domains = var.domains
+ certificates_arn = aws_acm_certificate.cert[*].arn
  task_port = var.task_port
  task_execution_role_arn = var.task_execution_role_arn
  task_role_arn = var.task_role_arn
@@ -54,8 +55,8 @@ module "latest" {
  availability_zones = data.aws_availability_zones.available.names
  environments = var.environments
  platform_name = var.platform_name
- app_names = var.app_names
- domain = var.domain
+ apps = var.apps
+ domains = var.domains
  vpc_id = module.develop.vpc_id
  alb_listener_https_default_arn = module.develop.alb_listener_https_default_arn
  ecs_cluster_id = module.develop.ecs_cluster_id
@@ -74,11 +75,11 @@ module "production" {
  availability_zones = data.aws_availability_zones.available.names
  environments = var.environments
  platform_name = var.platform_name
- app_names = var.app_names
+ apps = var.apps
  vpc_cidr = var.vpc_cidr
  subnets_newbits = var.subnets_newbits
- domain = var.domain
- certificate_arn = aws_acm_certificate.cert.arn
+ domains = var.domains
+ certificates_arn = aws_acm_certificate.cert[*].arn
  task_port = var.task_port
  task_execution_role_arn = var.task_execution_role_arn
  task_role_arn = var.task_role_arn

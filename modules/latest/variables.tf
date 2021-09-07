@@ -29,14 +29,17 @@ variable "ecs_cluster_id" {
  type = string
 }
 
-variable "app_names" {
- type = list
- description = "Application name"
+variable "apps" {
+ type = list(object({
+  name = string
+  domain = string
+ }))
+ description = "Application names and their domain associations"
 }
 
-variable "domain" {
- type = string
- description = "Base domain of the app (without subdomain)"
+variable "domains" {
+ type = list
+ description = "Domain names list (without subdomain)"
 }
 
 variable "task_port" {

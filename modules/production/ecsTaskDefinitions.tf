@@ -1,15 +1,15 @@
 data "aws_ecs_task_definition" "tasks" {
- count = contains(var.environments, "production") ? length(var.app_names) : 0
+ count = contains(var.environments, "production") ? length(var.apps) : 0
  task_definition = aws_ecs_task_definition.tasks[count.index].family
 }
 
 resource "aws_ecs_task_definition" "tasks" {
- count = contains(var.environments, "production") ? length(var.app_names) : 0
- family = join("-", ["prod", var.app_names[count.index], "task"])
+ count = contains(var.environments, "production") ? length(var.apps) : 0
+ family = join("-", ["prod", var.apps[count.index].name, "task"])
  container_definitions = <<TASK_DEFINITION
   [
    {
-    "name": "${join("-", ["prod", var.app_names[count.index], "container"])}",
+    "name": "${join("-", ["prod", var.apps[count.index].name, "container"])}",
     "image": "${aws_ecr_repository.production[count.index].repository_url}",
     "memoryReservation": null,
     "resourceRequirements": null,
@@ -51,7 +51,7 @@ resource "aws_ecs_task_definition" "tasks" {
  requires_compatibilities = ["FARGATE"]
 
  tags = {
-  "Name" = join("-", ["prod", var.app_names[count.index], "task"])
+  "Name" = join("-", ["prod", var.apps[count.index].name, "task"])
   "Environemt" = "production"
  }
 }

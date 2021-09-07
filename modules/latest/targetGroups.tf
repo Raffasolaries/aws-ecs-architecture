@@ -1,7 +1,7 @@
 /* Load Balancer's Target groups */
 resource "aws_lb_target_group" "instances" {
- count = contains(var.environments, "latest") ? length(var.app_names) : 0
- name        = join("-", ["latest", var.app_names[count.index], "tg"])
+ count = contains(var.environments, "latest") ? length(var.apps) : 0
+ name        = join("-", ["latest", var.apps[count.index].name, "tg"])
  port        = var.task_port
  protocol    = "HTTP"
  target_type = "ip"
@@ -18,12 +18,12 @@ resource "aws_lb_target_group" "instances" {
 
  stickiness {
   enabled = true
-  cookie_name = join("-", ["latest", var.app_names[count.index], "alb"])
+  cookie_name = join("-", ["latest", var.apps[count.index].name, "alb"])
   type = "app_cookie"
  }
 
  tags = {
-  Name = join("-", ["latest", var.app_names[count.index], "tg"])
+  Name = join("-", ["latest", var.apps[count.index].name, "tg"])
   Environment = "latest"
  }
 }

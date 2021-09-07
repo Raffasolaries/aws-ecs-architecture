@@ -48,8 +48,8 @@ locals {
 }
 
 resource "aws_cloudwatch_metric_alarm" "cpu_utilization_high" {
- count = contains(var.environments, "production") ? length(var.app_names) : 0
- alarm_name          = "prod-${var.app_names[count.index]}-CPU-Utilization-High-${local.ecs_as_cpu_high_threshold_per}"
+ count = contains(var.environments, "production") ? length(var.apps) : 0
+ alarm_name          = "prod-${var.apps[count.index].name}-CPU-Utilization-High-${local.ecs_as_cpu_high_threshold_per}"
  comparison_operator = "GreaterThanOrEqualToThreshold"
  evaluation_periods  = "1"
  metric_name         = "CPUUtilization"
@@ -65,14 +65,14 @@ resource "aws_cloudwatch_metric_alarm" "cpu_utilization_high" {
 
  alarm_actions = [aws_appautoscaling_policy.app_up[count.index].arn]
  tags = {
-  Name = "prod-${var.app_names[count.index]}-CPU-Utilization-High-${local.ecs_as_cpu_high_threshold_per}"
+  Name = "prod-${var.apps[count.index].name}-CPU-Utilization-High-${local.ecs_as_cpu_high_threshold_per}"
   Environment = "production"
  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "cpu_utilization_low" {
- count = contains(var.environments, "production") ? length(var.app_names) : 0
- alarm_name          = "prod-${var.app_names[count.index]}-CPU-Utilization-Low-${local.ecs_as_cpu_low_threshold_per}"
+ count = contains(var.environments, "production") ? length(var.apps) : 0
+ alarm_name          = "prod-${var.apps[count.index].name}-CPU-Utilization-Low-${local.ecs_as_cpu_low_threshold_per}"
  comparison_operator = "LessThanThreshold"
  evaluation_periods  = "1"
  metric_name         = "CPUUtilization"
@@ -88,14 +88,14 @@ resource "aws_cloudwatch_metric_alarm" "cpu_utilization_low" {
 
  alarm_actions = [aws_appautoscaling_policy.app_down[count.index].arn]
  tags = {
-  Name = "prod-${var.app_names[count.index]}-CPU-Utilization-Low-${local.ecs_as_cpu_low_threshold_per}"
+  Name = "prod-${var.apps[count.index].name}-CPU-Utilization-Low-${local.ecs_as_cpu_low_threshold_per}"
   Environment = "production"
  }
 }
 
 resource "aws_appautoscaling_policy" "app_up" {
- count = contains(var.environments, "production") ? length(var.app_names) : 0
- name               = "prod-${var.app_names[count.index]}-scale-up"
+ count = contains(var.environments, "production") ? length(var.apps) : 0
+ name               = "prod-${var.apps[count.index].name}-scale-up"
  service_namespace  = aws_appautoscaling_target.ecs_target[count.index].service_namespace
  resource_id        = aws_appautoscaling_target.ecs_target[count.index].resource_id
  scalable_dimension = aws_appautoscaling_target.ecs_target[count.index].scalable_dimension
@@ -113,8 +113,8 @@ resource "aws_appautoscaling_policy" "app_up" {
 }
 
 resource "aws_appautoscaling_policy" "app_down" {
- count = contains(var.environments, "production") ? length(var.app_names) : 0
- name               = "prod-${var.app_names[count.index]}-scale-down"
+ count = contains(var.environments, "production") ? length(var.apps) : 0
+ name               = "prod-${var.apps[count.index].name}-scale-down"
  service_namespace  = aws_appautoscaling_target.ecs_target[count.index].service_namespace
  resource_id        = aws_appautoscaling_target.ecs_target[count.index].resource_id
  scalable_dimension = aws_appautoscaling_target.ecs_target[count.index].scalable_dimension
@@ -132,7 +132,7 @@ resource "aws_appautoscaling_policy" "app_down" {
 }
 
 resource "aws_appautoscaling_target" "ecs_target" {
- count = contains(var.environments, "production") ? length(var.app_names) : 0
+ count = contains(var.environments, "production") ? length(var.apps) : 0
  max_capacity       = local.max_capacity
  min_capacity       = local.min_capacity
  resource_id        = "service/${aws_ecs_cluster.production[0].name}/${aws_ecs_service.services[count.index].name}"

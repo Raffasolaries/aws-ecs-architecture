@@ -1,7 +1,7 @@
 # Creates all the required services
 resource "aws_ecs_service" "services" {
- count = contains(var.environments, "latest") ? length(var.app_names) : 0
- name = join("-", ["latest", var.app_names[count.index], "service"])
+ count = contains(var.environments, "latest") ? length(var.apps) : 0
+ name = join("-", ["latest", var.apps[count.index].name, "service"])
  cluster = var.ecs_cluster_id
  task_definition = join(":", [aws_ecs_task_definition.tasks[count.index].family, max(aws_ecs_task_definition.tasks[count.index].revision, data.aws_ecs_task_definition.tasks[count.index].revision)])
  enable_execute_command = true
@@ -13,7 +13,7 @@ resource "aws_ecs_service" "services" {
 
  load_balancer {
   target_group_arn = aws_lb_target_group.instances[count.index].arn
-  container_name   = join("-", ["latest", var.app_names[count.index], "container"])
+  container_name   = join("-", ["latest", var.apps[count.index].name, "container"])
   container_port   = 8080
  }
 
@@ -39,7 +39,7 @@ resource "aws_ecs_service" "services" {
  }
 
  tags = {
-  "Name" = join("-", ["latest", var.app_names[count.index], "service"])
+  "Name" = join("-", ["latest", var.apps[count.index].name, "service"])
   "Environemt" = "latest"
  }
 }

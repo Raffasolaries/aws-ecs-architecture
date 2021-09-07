@@ -19,9 +19,12 @@ variable "platform_name" {
  type = string
 }
 
-variable "app_names" {
- type = list
- description = "Application name"
+variable "apps" {
+ type = list(object({
+  name = string
+  domain = string
+ }))
+ description = "Application names and their domain associations"
 }
 
 variable "vpc_cidr" {
@@ -34,14 +37,14 @@ variable "subnets_newbits" {
  description = "the difference between subnet mask and network mask"
 }
 
-variable "domain" {
- type = string
- description = "Base domain of the app (without subdomain)"
+variable "domains" {
+ type = list
+ description = "Domain names list (without subdomain)"
 }
 
-variable "certificate_arn" {
- type = string
- description = "ARN of the main application domain certificate"
+variable "certificates_arn" {
+ type = list
+ description = "Applications SSL certificates ARN"
 }
 
 variable "task_port" {

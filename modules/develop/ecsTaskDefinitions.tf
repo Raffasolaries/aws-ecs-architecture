@@ -1,15 +1,15 @@
 data "aws_ecs_task_definition" "tasks" {
- count = contains(var.environments, "develop") ? length(var.app_names) : 0
+ count = contains(var.environments, "develop") ? length(var.apps) : 0
  task_definition = aws_ecs_task_definition.tasks[count.index].family
 }
 
 resource "aws_ecs_task_definition" "tasks" {
- count = contains(var.environments, "develop") ? length(var.app_names) : 0
- family = join("-", ["develop", var.app_names[count.index], "task"])
+ count = contains(var.environments, "develop") ? length(var.apps) : 0
+ family = join("-", ["develop", var.apps[count.index].name, "task"])
  container_definitions = <<TASK_DEFINITION
   [
    {
-    "name": "${join("-", ["develop", var.app_names[count.index], "container"])}",
+    "name": "${join("-", ["develop", var.apps[count.index].name, "container"])}",
     "image": "${aws_ecr_repository.staging[count.index].repository_url}",
     "memoryReservation": null,
     "resourceRequirements": null,
@@ -56,7 +56,7 @@ resource "aws_ecs_task_definition" "tasks" {
  }
 
  tags = {
-  "Name" = join("-", ["develop", var.app_names[count.index], "task"])
+  "Name" = join("-", ["develop", var.apps[count.index].name, "task"])
   "Environemt" = "develop"
  }
 }

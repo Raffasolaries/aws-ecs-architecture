@@ -1,16 +1,16 @@
 # Retrieved data
 data "aws_ecs_task_definition" "tasks" {
- count = contains(var.environments, "latest") ? length(var.app_names) : 0
+ count = contains(var.environments, "latest") ? length(var.apps) : 0
  task_definition = aws_ecs_task_definition.tasks[count.index].family
 }
 # New Resource
 resource "aws_ecs_task_definition" "tasks" {
- count = contains(var.environments, "latest") ? length(var.app_names) : 0
- family = join("-", ["latest", var.app_names[count.index], "task"])
+ count = contains(var.environments, "latest") ? length(var.apps) : 0
+ family = join("-", ["latest", var.apps[count.index].name, "task"])
  container_definitions = <<TASK_DEFINITION
   [
    {
-    "name": "${join("-", ["latest", var.app_names[count.index], "container"])}",
+    "name": "${join("-", ["latest", var.apps[count.index].name, "container"])}",
     "image": "${var.ecr_repositories_urls[count.index]}",
     "memoryReservation": null,
     "resourceRequirements": null,
@@ -57,7 +57,7 @@ resource "aws_ecs_task_definition" "tasks" {
  }
 
  tags = {
-  "Name" = join("-", ["latest", var.app_names[count.index], "task"])
+  "Name" = join("-", ["latest", var.apps[count.index].name, "task"])
   "Environemt" = "latest"
  }
 }
