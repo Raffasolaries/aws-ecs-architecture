@@ -14,6 +14,7 @@ No requirements.
 |------|--------|---------|
 | <a name="module_develop"></a> [develop](#module\_develop) | ./modules/develop | n/a |
 | <a name="module_latest"></a> [latest](#module\_latest) | ./modules/latest | n/a |
+| <a name="module_production"></a> [production](#module\_production) | ./modules/production | n/a |
 
 ## Resources
 
@@ -27,8 +28,8 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_app_names"></a> [app\_names](#input\_app\_names) | Application name | `list` | n/a | yes |
-| <a name="input_domain"></a> [domain](#input\_domain) | Base domain of the app (without subdomain) | `string` | n/a | yes |
+| <a name="input_apps"></a> [apps](#input\_apps) | Application names and their domain associations | <pre>list(object({<br>  name = string<br>  domain = string<br> }))</pre> | n/a | yes |
+| <a name="input_domains"></a> [domains](#input\_domains) | Domain names list (without subdomain) | `list` | n/a | yes |
 | <a name="input_environments"></a> [environments](#input\_environments) | referral environments | `list` | n/a | yes |
 | <a name="input_iam_instance_role_name"></a> [iam\_instance\_role\_name](#input\_iam\_instance\_role\_name) | IAM instance role name | `string` | n/a | yes |
 | <a name="input_platform_name"></a> [platform\_name](#input\_platform\_name) | Platform name | `string` | n/a | yes |
@@ -44,4 +45,7 @@ No requirements.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_ecr_repositories_urls"></a> [ecr\_repositories\_urls](#output\_ecr\_repositories\_urls) | ECR repositories names |
+| <a name="output_production_alb_name"></a> [production\_alb\_name](#output\_production\_alb\_name) | Production ALB Name |
+| <a name="output_production_ecr_repositories_urls"></a> [production\_ecr\_repositories\_urls](#output\_production\_ecr\_repositories\_urls) | ECR Production repositories names |
+| <a name="output_staging_alb_name"></a> [staging\_alb\_name](#output\_staging\_alb\_name) | Staging ALB Name |
+| <a name="output_staging_ecr_repositories_urls"></a> [staging\_ecr\_repositories\_urls](#output\_staging\_ecr\_repositories\_urls) | ECR Staging repositories names |

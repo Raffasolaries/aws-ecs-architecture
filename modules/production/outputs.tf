@@ -1,10 +1,10 @@
 output "vpc_arn" {
- description = "Staging VPC ARN"
+ description = "Production VPC ARN"
  value = aws_vpc.vpc[0].arn
 }
 
 output "vpc_id" {
- description = "Staging VPC ID"
+ description = "Production VPC ID"
  value = aws_vpc.vpc[0].id
 }
 
@@ -24,12 +24,17 @@ output "ecr_repositories_urls" {
 }
 
 output "ecs_cluster_id" {
- description = "Staging ECS Cluster ID"
+ description = "Production ECS Cluster ID"
  value = aws_ecs_cluster.production[0].id
 }
 
+output "alb_name" {
+ description = "Production ALB Name"
+ value = aws_lb.alb[0].name
+}
+
 output "alb_listener_https_default_arn" {
- description = "Staging ALB HTTPS default listerner ARN"
+ description = "Production ALB HTTPS default listerner ARN"
  value = aws_lb_listener.https_default[0].arn
 }
 

@@ -28,6 +28,11 @@ output "ecs_cluster_id" {
  value = aws_ecs_cluster.staging[0].id
 }
 
+output "alb_name" {
+ description = "Staging ALB Name"
+ value = aws_lb.alb[0].name
+}
+
 output "alb_listener_https_default_arn" {
  description = "Staging ALB HTTPS default listerner ARN"
  value = aws_lb_listener.https_default[0].arn
