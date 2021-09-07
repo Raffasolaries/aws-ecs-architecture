@@ -20,7 +20,7 @@ output "service_security_group_id" {
 
 output "ecr_repositories_urls" {
  description = "ECR repositories URLs"
- value = [for repository in aws_ecr_repository.staging : repository.repository_url]
+ value = [for repository in aws_ecr_repository.production : repository.repository_url]
 }
 
 output "ecs_cluster_id" {

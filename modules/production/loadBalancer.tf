@@ -1,7 +1,7 @@
 /* Application Load Balncer */
 resource "aws_lb" "alb" {
  count = contains(var.environments, "production") ? 1 : 0
- name               = join("-", ["staging", var.platform_name, "alb"])
+ name               = join("-", ["prod", var.platform_name, "alb"])
  internal           = false
  load_balancer_type = "application"
  security_groups    = [aws_security_group.alb[0].id]

@@ -23,20 +23,10 @@ resource "aws_ecs_service" "services" {
   security_groups = [aws_security_group.instances[0].id]
   assign_public_ip = false
  }
-
- ordered_placement_strategy {
-  type = "binpack"
-  field = "cpu"
- }
  
  deployment_circuit_breaker {
   enable = true
   rollback = true
- }
-
- placement_constraints {
-  type       = "memberOf"
-  expression = join("", ["attribute:ecs.availability-zone in [", join(", ", var.availability_zones), "]"])
  }
 
  tags = {

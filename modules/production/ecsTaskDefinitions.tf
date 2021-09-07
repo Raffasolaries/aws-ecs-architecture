@@ -10,7 +10,7 @@ resource "aws_ecs_task_definition" "tasks" {
   [
    {
     "name": "${join("-", ["prod", var.app_names[count.index], "container"])}",
-    "image": "${aws_ecr_repository.staging[count.index].repository_url}",
+    "image": "${aws_ecr_repository.production[count.index].repository_url}",
     "memoryReservation": null,
     "resourceRequirements": null,
     "essential": true,
@@ -49,11 +49,6 @@ resource "aws_ecs_task_definition" "tasks" {
  cpu = 256
  network_mode = "awsvpc"
  requires_compatibilities = ["FARGATE"]
-
- placement_constraints {
-  type       = "memberOf"
-  expression = join("", ["attribute:ecs.availability-zone in [", join(", ", var.availability_zones), "]"])
- }
 
  tags = {
   "Name" = join("-", ["prod", var.app_names[count.index], "task"])

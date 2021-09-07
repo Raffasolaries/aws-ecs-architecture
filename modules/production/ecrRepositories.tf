@@ -1,5 +1,5 @@
 # Creating referred repositories
-resource "aws_ecr_repository" "staging" {
+resource "aws_ecr_repository" "production" {
  count = contains(var.environments, "production") ? length(var.app_names) : 0
  name  = join("-", ["prod", var.app_names[count.index], "ecr-repository"])
  image_tag_mutability = "MUTABLE"
