@@ -67,6 +67,7 @@ No modules.
 | <a name="input_iam_instance_role_name"></a> [iam\_instance\_role\_name](#input\_iam\_instance\_role\_name) | IAM instance role name | `string` | n/a | yes |
 | <a name="input_platform_name"></a> [platform\_name](#input\_platform\_name) | Platform name | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS deployment region | `string` | `"eu-south-1"` | no |
+| <a name="input_staging_num_instances"></a> [staging\_num\_instances](#input\_staging\_num\_instances) | Number of EC2 instances which will be created in the staging environment | `number` | n/a | yes |
 | <a name="input_subnets_newbits"></a> [subnets\_newbits](#input\_subnets\_newbits) | the difference between subnet mask and network mask | `number` | n/a | yes |
 | <a name="input_task_execution_role_arn"></a> [task\_execution\_role\_arn](#input\_task\_execution\_role\_arn) | ECS Tasks Execution role arn | `string` | n/a | yes |
 | <a name="input_task_port"></a> [task\_port](#input\_task\_port) | Application exposed port to Load Balancer | `number` | n/a | yes |

@@ -75,8 +75,8 @@ resource "aws_security_group" "instances" {
    to_port          = 8080
    protocol         = "tcp"
    prefix_list_ids = []
-   security_groups = []
-   cidr_blocks      = [var.vpc_cidr]
+   security_groups = [aws_security_group.alb[0].id]
+   cidr_blocks      = []
    ipv6_cidr_blocks = []
    self = false
   }

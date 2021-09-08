@@ -71,3 +71,8 @@ variable "cloudwatch_groups" {
  type = list
  description = "CloudWatch Logs Group for ECS Task containers"
 }
+
+variable "staging_num_instances" {
+ type = number
+ description = "Number of EC2 instances which will be created in the staging environment"
+}

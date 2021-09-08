@@ -10,7 +10,7 @@ data "aws_ami_ids" "amazon" {
  owners = ["amazon", "aws-marketplace"]
 }
 resource "aws_instance" "web" {
- count = contains(var.environments, "develop") || contains(var.environments, "latest") ? 3 : 0
+ count = contains(var.environments, "develop") || contains(var.environments, "latest") ? var.staging_num_instances : 0
  ami           = data.aws_ami_ids.amazon[0].ids[0]
  // launch_template = aws_launch_configuration.ecs_optimized[0].id
  instance_type = "t3.micro"
