@@ -36,3 +36,6 @@ terraform.rc
 # vscode configuration
 .vscode
 file:
+
+# MacOS
+.DS_Store
