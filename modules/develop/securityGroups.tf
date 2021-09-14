@@ -43,16 +43,16 @@ resource "aws_security_group" "default" {
  depends_on  = [aws_vpc.vpc]
 
  ingress {
-  from_port = "0"
-  to_port   = "0"
-  protocol  = "-1"
+  from_port = 0
+  to_port   = 0
+  protocol  = -1
   self      = "true"
  }
  
  egress {
-  from_port = "0"
-  to_port   = "0"
-  protocol  = "-1"
+  from_port = 0
+  to_port   = 0
+  protocol  = -1
   self      = "true"
  }
 
@@ -71,8 +71,8 @@ resource "aws_security_group" "instances" {
  ingress = [
   {
    description      = "Allows traffic in the same VPC"
-   from_port        = 8080
-   to_port          = 8080
+   from_port        = 0
+   to_port          = 0
    protocol         = "tcp"
    prefix_list_ids = []
    security_groups = [aws_security_group.alb[0].id]
