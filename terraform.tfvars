@@ -1,10 +1,16 @@
 region = "eu-west-3"
 profile = "default"
 platform_name = "laravel-applications"
-apps = [{
- name: "gowelfare",
- domain: "tantosvago.it"
-}]
+apps = [
+    {
+        name: "gowelfare",
+        domain: "tantosvago.it"
+    },
+    {
+        name: "template",
+        domain: "tantosvago.it"
+    }
+]
 environments = ["develop","latest","production"]
 vpc_cidr = "10.0.0.0/22"
 subnets_newbits = 3
