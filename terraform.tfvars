@@ -5,10 +5,6 @@ apps = [
     {
         name: "gowelfare",
         domain: "tantosvago.it"
-    },
-    {
-        name: "template",
-        domain: "tantosvago.it"
     }
 ]
 environments = ["develop","latest","production"]
