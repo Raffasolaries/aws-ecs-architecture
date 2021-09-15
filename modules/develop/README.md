@@ -67,7 +67,6 @@ No modules.
 | <a name="input_iam_instance_role_name"></a> [iam\_instance\_role\_name](#input\_iam\_instance\_role\_name) | IAM instance role name | `string` | n/a | yes |
 | <a name="input_platform_name"></a> [platform\_name](#input\_platform\_name) | Platform name | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS deployment region | `string` | `"eu-south-1"` | no |
-| <a name="input_staging_num_instances"></a> [staging\_num\_instances](#input\_staging\_num\_instances) | Number of EC2 instances which will be created in the staging environment | `number` | n/a | yes |
 | <a name="input_subnets_newbits"></a> [subnets\_newbits](#input\_subnets\_newbits) | the difference between subnet mask and network mask | `number` | n/a | yes |
 | <a name="input_task_execution_role_arn"></a> [task\_execution\_role\_arn](#input\_task\_execution\_role\_arn) | ECS Tasks Execution role arn | `string` | n/a | yes |
 | <a name="input_task_port"></a> [task\_port](#input\_task\_port) | Application Container exposed port | `number` | n/a | yes |
@@ -83,8 +82,7 @@ No modules.
 | <a name="output_ecr_repositories_urls"></a> [ecr\_repositories\_urls](#output\_ecr\_repositories\_urls) | ECR repositories URLs |
 | <a name="output_ecs_cluster_id"></a> [ecs\_cluster\_id](#output\_ecs\_cluster\_id) | Staging ECS Cluster ID |
 | <a name="output_instances_security_group_id"></a> [instances\_security\_group\_id](#output\_instances\_security\_group\_id) | Instances Security Group |
-| <a name="output_private_subnet_ids"></a> [private\_subnet\_ids](#output\_private\_subnet\_ids) | Private subnet ids |
-| <a name="output_private_subnets_ids"></a> [private\_subnets\_ids](#output\_private\_subnets\_ids) | Private Subnets IDs |
+| <a name="output_private_subnets_ids"></a> [private\_subnets\_ids](#output\_private\_subnets\_ids) | Private subnet ids |
 | <a name="output_service_security_group_id"></a> [service\_security\_group\_id](#output\_service\_security\_group\_id) | Security Group allows communication from ECS service to Docker containers |
 | <a name="output_vpc_arn"></a> [vpc\_arn](#output\_vpc\_arn) | Staging VPC ARN |
 | <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | Staging VPC ID |

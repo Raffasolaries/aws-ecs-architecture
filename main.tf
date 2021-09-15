@@ -47,7 +47,6 @@ module "develop" {
  task_role_arn = var.task_role_arn
  iam_instance_role_name = var.iam_instance_role_name
  cloudwatch_groups = aws_cloudwatch_log_group.ecs_tasks[*].name
- staging_num_instances = var.staging_num_instances
 }
 
 module "latest" {
@@ -67,6 +66,7 @@ module "latest" {
  task_execution_role_arn = var.task_execution_role_arn
  task_role_arn = var.task_role_arn
  instances_security_group_id = module.develop.instances_security_group_id
+ iam_instance_role_name = var.iam_instance_role_name
  cloudwatch_groups = aws_cloudwatch_log_group.ecs_tasks[*].name
 }
 

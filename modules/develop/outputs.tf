@@ -8,7 +8,7 @@ output "vpc_id" {
  value = aws_vpc.vpc[0].id
 }
 
-output "private_subnet_ids" {
+output "private_subnets_ids" {
  description = "Private subnet ids"
  value = aws_subnet.private_subnet[*].id
 }
@@ -36,11 +36,6 @@ output "alb_name" {
 output "alb_listener_https_default_arn" {
  description = "Staging ALB HTTPS default listerner ARN"
  value = aws_lb_listener.https_default[0].arn
-}
-
-output "private_subnets_ids" {
- description = "Private Subnets IDs"
- value = aws_subnet.private_subnet[*].id
 }
 
 output "instances_security_group_id" {

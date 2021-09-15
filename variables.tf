@@ -61,8 +61,3 @@ variable "iam_instance_role_name" {
  type = string
  description = "IAM instance role name"
 }
-
-variable "staging_num_instances" {
- type = number
- description = "Number of EC2 instances which will be created in the staging environment"
-}
