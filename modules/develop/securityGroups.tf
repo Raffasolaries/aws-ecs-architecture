@@ -71,8 +71,8 @@ resource "aws_security_group" "instances" {
  ingress = [
   {
    description      = "Allows traffic in the same VPC"
-   from_port        = 0
-   to_port          = 0
+   from_port        = 32768
+   to_port          = 65535
    protocol         = "tcp"
    prefix_list_ids = []
    security_groups = [aws_security_group.alb[0].id]

@@ -4,6 +4,7 @@ resource "aws_lb" "alb" {
  name               = join("-", ["prod", var.platform_name, "alb"])
  internal           = false
  load_balancer_type = "application"
+ enable_http2    = "true"
  security_groups    = [aws_security_group.alb[0].id]
  subnets            = aws_subnet.public_subnet[*].id
 

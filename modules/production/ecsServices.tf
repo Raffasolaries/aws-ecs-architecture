@@ -15,7 +15,7 @@ resource "aws_ecs_service" "services" {
  load_balancer {
   target_group_arn = aws_lb_target_group.ips[count.index].arn
   container_name   = join("-", ["prod", var.apps[count.index].name, "container"])
-  container_port   = 8080
+  container_port   = var.task_port
  }
 
  network_configuration {

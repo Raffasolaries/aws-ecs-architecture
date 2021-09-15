@@ -12,7 +12,7 @@ resource "aws_lb_target_group" "ips" {
   unhealthy_threshold = 2
   timeout = 3
   interval = 30
-  matcher = "200-299"
+  matcher = "200-299,301,302"
   path = "/"
  }
 

@@ -14,13 +14,7 @@ resource "aws_ecs_service" "services" {
  load_balancer {
   target_group_arn = aws_lb_target_group.instances[count.index].arn
   container_name   = join("-", ["latest", var.apps[count.index].name, "container"])
-  container_port   = 8080
- }
-
- network_configuration {
-  subnets = var.private_subnets_ids[*]
-  security_groups = [var.instances_security_group_id]
-  assign_public_ip = false
+  container_port   = var.task_port
  }
 
  ordered_placement_strategy {
