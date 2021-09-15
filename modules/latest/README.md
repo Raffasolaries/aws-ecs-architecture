@@ -39,7 +39,7 @@ No modules.
 | <a name="input_private_subnets_ids"></a> [private\_subnets\_ids](#input\_private\_subnets\_ids) | Staging Private Subnets IDs | `list` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS deployment region | `string` | `"eu-south-1"` | no |
 | <a name="input_task_execution_role_arn"></a> [task\_execution\_role\_arn](#input\_task\_execution\_role\_arn) | ECS Tasks Execution role arn | `string` | n/a | yes |
-| <a name="input_task_port"></a> [task\_port](#input\_task\_port) | Application exposed port to Load Balancer | `number` | n/a | yes |
+| <a name="input_task_port"></a> [task\_port](#input\_task\_port) | Application Container exposed port | `number` | n/a | yes |
 | <a name="input_task_role_arn"></a> [task\_role\_arn](#input\_task\_role\_arn) | ECS Tasks Execution role arn | `string` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | Staging VPC ID | `string` | n/a | yes |
 

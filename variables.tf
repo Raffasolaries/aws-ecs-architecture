@@ -44,7 +44,7 @@ variable "domains" {
 
 variable "task_port" {
  type = number
- description = "Application exposed port to Load Balancer"
+ description = "Application Container exposed port"
 }
 
 variable "task_execution_role_arn" {
