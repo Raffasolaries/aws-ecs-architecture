@@ -23,7 +23,7 @@ resource "aws_ecs_service" "services" {
  capacity_provider_strategy {
   capacity_provider = "FARGATE_SPOT"
   base = 1
-  weight = 100
+  weight = 1
  }
 
  network_configuration {
