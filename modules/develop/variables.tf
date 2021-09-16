@@ -62,10 +62,10 @@ variable "task_role_arn" {
  description = "ECS Tasks Execution role arn"
 }
 
-variable "iam_instance_role_name" {
- type = string
- description = "IAM instance role name"
-}
+// variable "iam_instance_role_name" {
+//  type = string
+//  description = "IAM instance role name"
+// }
 
 variable "cloudwatch_groups" {
  type = list

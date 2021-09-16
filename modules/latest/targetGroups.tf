@@ -4,6 +4,7 @@ resource "aws_lb_target_group" "instances" {
  name        = join("-", ["latest", var.apps[count.index].name, "tg"])
  port        = var.task_port
  protocol    = "HTTP"
+ target_type = "ip"
  vpc_id      = var.vpc_id
 
  health_check {

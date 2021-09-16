@@ -72,10 +72,10 @@ variable "instances_security_group_id" {
  type = string
 }
 
-variable "iam_instance_role_name" {
- type = string
- description = "IAM instance role name"
-}
+// variable "iam_instance_role_name" {
+//  type = string
+//  description = "IAM instance role name"
+// }
 
 variable "ecr_repositories_urls" {
  description = "Staging ECR Repositories URLs"

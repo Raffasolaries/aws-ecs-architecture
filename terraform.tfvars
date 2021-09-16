@@ -5,10 +5,6 @@ apps = [
     {
         name: "gowelfare",
         domain: "tantosvago.it"
-    },
-    {
-        name: "template",
-        domain: "tantosvago.it"
     }
 ]
 environments = ["develop","latest","production"]
@@ -19,4 +15,4 @@ task_port = 8080
 task_execution_role_arn = "arn:aws:iam::255994201635:role/ecsTaskExecutionRole"
 task_role_arn = "arn:aws:iam::255994201635:role/ecsTaskExecutionRole"
 // service_role = "arn:aws:iam::255994201635:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS"
-iam_instance_role_name = "ecsInstanceRole"
+// iam_instance_role_name = "ecsInstanceRole"

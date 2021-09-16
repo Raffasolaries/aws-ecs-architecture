@@ -6,12 +6,12 @@ resource "aws_ecs_service" "services" {
  task_definition = join(":", [aws_ecs_task_definition.tasks[count.index].family, max(aws_ecs_task_definition.tasks[count.index].revision, data.aws_ecs_task_definition.tasks[count.index].revision)])
  enable_execute_command = true
 
- launch_type = "EC2"
+ // launch_type = "FARGATE"
  desired_count = 1
  deployment_maximum_percent         = 100
  deployment_minimum_healthy_percent = 0
 
- force_new_deployment = true
+ force_new_deployment = false
 
  load_balancer {
   target_group_arn = aws_lb_target_group.instances[count.index].arn
@@ -19,19 +19,21 @@ resource "aws_ecs_service" "services" {
   container_port   = var.task_port
  }
 
- ordered_placement_strategy {
-  type = "binpack"
-  field = "cpu"
+ capacity_provider_strategy {
+  capacity_provider = "FARGATE_SPOT"
+  base = 1
+  weight = 100
+ }
+
+ network_configuration {
+  subnets = var.private_subnets_ids
+  security_groups = [var.instances_security_group_id]
+  assign_public_ip = false
  }
  
  deployment_circuit_breaker {
   enable = false
   rollback = false
- }
-
- placement_constraints {
-  type       = "memberOf"
-  expression = join("", ["attribute:ecs.availability-zone in [", join(", ", var.availability_zones), "]"])
  }
 
  tags = {

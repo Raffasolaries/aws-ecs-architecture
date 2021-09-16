@@ -31,7 +31,6 @@ No requirements.
 | <a name="input_apps"></a> [apps](#input\_apps) | Application names and their domain associations | <pre>list(object({<br>  name = string<br>  domain = string<br> }))</pre> | n/a | yes |
 | <a name="input_domains"></a> [domains](#input\_domains) | Domain names list (without subdomain) | `list` | n/a | yes |
 | <a name="input_environments"></a> [environments](#input\_environments) | referral environments | `list` | n/a | yes |
-| <a name="input_iam_instance_role_name"></a> [iam\_instance\_role\_name](#input\_iam\_instance\_role\_name) | IAM instance role name | `string` | n/a | yes |
 | <a name="input_platform_name"></a> [platform\_name](#input\_platform\_name) | Platform name | `string` | n/a | yes |
 | <a name="input_profile"></a> [profile](#input\_profile) | AWS IAM user credentials | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS deployment region | `string` | `"eu-south-1"` | no |

@@ -17,7 +17,6 @@ resource "aws_ecs_task_definition" "tasks" {
     "essential": true,
     "portMappings": [
      {
-      "hostPort": 0,
       "containerPort": ${var.task_port},
       "protocol": "tcp"
      }
@@ -49,13 +48,8 @@ resource "aws_ecs_task_definition" "tasks" {
  task_role_arn = var.task_role_arn
  memory = 512
  cpu = 256
- network_mode = "bridge"
- requires_compatibilities = ["EC2"]
-
- placement_constraints {
-  type       = "memberOf"
-  expression = join("", ["attribute:ecs.availability-zone in [", join(", ", var.availability_zones), "]"])
- }
+ network_mode = "awsvpc"
+ requires_compatibilities = ["FARGATE"]
 
  tags = {
   "Name" = join("-", ["latest", var.apps[count.index].name, "task"])
